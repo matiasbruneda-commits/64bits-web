@@ -990,8 +990,7 @@ a.contact-value:hover { color: var(--accent); }
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 58vmin;
-    max-width: 580px;
+    width: 48vw;
     opacity: 0.08;
     pointer-events: none;
     user-select: none;
@@ -1011,14 +1010,30 @@ a.contact-value:hover { color: var(--accent); }
     opacity: 0;
     transform: translateY(30px);
     transition:
-        opacity  0.72s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        transform 0.72s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity  0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transition-delay: var(--stagger, 0ms);
+}
+/* Después de la primera aparición, el exit es fade puro sin slide */
+.fade-up.fade-seen {
+    transform: translateY(0);
 }
 .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* === HERO — FADE-IN AL CARGAR (de arriba hacia abajo) === */
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow  { animation: heroFadeIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.10s both; }
+.hero-title    { animation: heroFadeIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.28s both; }
+.hero-subtitle { animation: heroFadeIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.48s both; }
+.hero-actions  { animation: heroFadeIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.68s both; }
+.hero-visual   { animation: heroFadeIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.55s both; }
 
 /* Nav y chat ya tienen sus z-index — el watermark (z-index: 0) queda
    sobre el contenido no posicionado pero pointer-events: none lo hace transparente a clics */

@@ -29,20 +29,71 @@ window.addEventListener('scroll', () => {
         : 'rgba(0, 0, 0, 0.75)';
 }, { passive: true });
 
-// === WATERMARK PARALLAX ===
+// === SCROLL: PARALLAX + HERO FADE-OUT + FADE-OUT GLOBAL ===
 
-const watermark = document.querySelector('.watermark');
-if (watermark) {
-    let rafPending = false;
-    const updateParallax = () => {
-        rafPending = false;
-        watermark.style.transform =
-            `translate(-50%, calc(-50% - ${window.scrollY * 0.25}px))`;
-    };
-    window.addEventListener('scroll', () => {
-        if (!rafPending) { rafPending = true; requestAnimationFrame(updateParallax); }
-    }, { passive: true });
-}
+const watermark   = document.querySelector('.watermark');
+const heroContent = document.querySelector('.hero-content');
+const heroVisual  = document.querySelector('.hero-visual');
+const heroEl      = document.querySelector('.hero');
+
+// Declarado aquí para que onScrollRAF lo vea; se llena en registerFade()
+const fadeEls = [];
+
+// Cachear maxScroll para el parallax bidireccional
+let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+window.addEventListener('resize', () => {
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+}, { passive: true });
+
+let rafPending = false;
+const onScrollRAF = () => {
+    rafPending = false;
+    const sy    = window.scrollY;
+    const viewH = window.innerHeight;
+
+    // Parallax bidireccional: empieza 20% por debajo del centro al cargar,
+    // cruza el centro exacto a mitad de página, termina 20% por encima al final.
+    if (watermark) {
+        const progress = maxScroll > 0 ? sy / maxScroll : 0;
+        const vOffset  = (0.5 - progress) * viewH * 0.4;
+        watermark.style.transform = `translate(-50%, calc(-50% + ${vOffset}px))`;
+    }
+
+    // Hero: fade-out al hacer scroll, fade-in al volver
+    if (heroEl) {
+        const heroH = heroEl.offsetHeight;
+        const fade  = sy > 0 ? Math.max(0, 1 - sy / (heroH * 0.55)) : null;
+        const val   = fade !== null ? String(fade) : '';
+        if (heroContent) heroContent.style.opacity = val;
+        if (heroVisual)  heroVisual.style.opacity  = val;
+    }
+
+    // Fade-out global: cada elemento .fade-up desvanece al salir por arriba del viewport.
+    // Se usa opacidad directa (sin CSS transition) para que esté sincronizado con el scroll.
+    if (fadeEls.length) {
+        const exitZone = viewH * 0.22;
+        // Batch read: todos los rects juntos para evitar layout thrashing
+        const bottoms = fadeEls.map(el =>
+            el.classList.contains('fade-seen') ? el.getBoundingClientRect().bottom : Infinity
+        );
+        // Batch write: aplicar opacidades
+        fadeEls.forEach((el, i) => {
+            const b = bottoms[i];
+            if (b === Infinity) return;
+            if (b < exitZone) {
+                el.style.opacity    = String(Math.max(0, b / exitZone));
+                el.style.transition = 'none'; // sin lag: sincronizado con el dedo/scroll
+            } else if (el.style.transition === 'none') {
+                el.style.opacity    = '';     // CSS .visible controla la opacidad
+                el.style.transition = '';     // restaura transición para re-entrada suave
+            }
+        });
+    }
+};
+
+window.addEventListener('scroll', () => {
+    if (!rafPending) { rafPending = true; requestAnimationFrame(onScrollRAF); }
+}, { passive: true });
 
 // === SCROLL FADE-UP ===
 
@@ -51,20 +102,31 @@ document.querySelectorAll('.stat-number').forEach(el => {
     el.dataset.target = el.textContent.trim();
 });
 
-const fadeObs = new IntersectionObserver((entries) => {
+// Fade-IN: IntersectionObserver gestiona la primera aparición desde abajo.
+// El fade-OUT lo maneja onScrollRAF con opacidad directa sincronizada con el scroll.
+const fadeInObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            fadeObs.unobserve(entry.target);
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('visible', 'fade-seen');
+        // Reset del stagger delay tras completar la animación inicial,
+        // así las re-apariciones no tienen delay artificial
+        if (!el.dataset.staggerDone) {
+            const delay = parseInt(el.style.getPropertyValue('--stagger') || '0', 10);
+            setTimeout(() => {
+                el.style.setProperty('--stagger', '0ms');
+                el.dataset.staggerDone = '1';
+            }, delay + 950);
         }
     });
-}, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+}, { threshold: 0.08 });
 
 function registerFade(selector, baseDelay, perItem) {
     document.querySelectorAll(selector).forEach((el, i) => {
         el.classList.add('fade-up');
         el.style.setProperty('--stagger', `${baseDelay + i * perItem}ms`);
-        fadeObs.observe(el);
+        fadeInObs.observe(el);
+        fadeEls.push(el); // registrar para fade-out global en onScrollRAF
     });
 }
 
