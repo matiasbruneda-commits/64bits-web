@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>64 Bits — Exportar PNG 2000px</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0f;
+      color: #f0f0f5;
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 48px 24px;
+    }
+    h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: #ccc; }
+    .preview-grid {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .preview-label {
+      font-size: 11px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .preview-dark {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px;
+    }
+    .preview-light {
+      background: #f5f5f7;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 32px;
+    }
+    img.logo-preview { width: 160px; height: auto; display: block; }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 980px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary { background: #0066FF; color: white; }
+    .btn-primary:hover { background: #0055DD; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: #0066FF; border: 1px solid rgba(0,102,255,0.4); }
+    .btn-ghost:hover { background: rgba(0,102,255,0.08); }
+    .note {
+      font-size: 13px;
+      color: #444;
+      text-align: center;
+      max-width: 440px;
+      line-height: 1.6;
+    }
+    .note strong { color: #666; }
+    .progress {
+      font-size: 13px;
+      color: #0066FF;
+      display: none;
+    }
+    canvas { display: none; }
+    .sizes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .size-btn {
+      padding: 8px 16px;
+      border-radius: 980px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid rgba(0,102,255,0.3);
+      background: transparent;
+      color: #0066FF;
+      transition: all 0.15s;
+    }
+    .size-btn.active, .size-btn:hover {
+      background: rgba(0,102,255,0.12);
+      border-color: rgba(0,102,255,0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Logo 64 Bits Belgrano — Exportar PNG</h1>
+
+  <div class="preview-grid">
+    <div class="preview-box">
+      <span class="preview-label">Fondo oscuro</span>
+      <div class="preview-dark">
+        <img class="logo-preview" id="logoPreview" src="logo.svg" alt="Logo 64 Bits">
+      </div>
+    </div>
+    <div class="preview-box">
+      <span class="preview-label">Fondo claro</span>
+      <div class="preview-light">
+        <img class="logo-preview" src="logo.svg" alt="Logo 64 Bits">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="sizes">
+      <button class="size-btn active" data-px="2000">2000 px</button>
+      <button class="size-btn" data-px="1200">1200 px</button>
+      <button class="size-btn" data-px="512">512 px</button>
+      <button class="size-btn" data-px="256">256 px</button>
+    </div>
+    <button class="btn btn-primary" id="exportBtn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 2v9M4 8l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Descargar PNG
+    </button>
+    <a class="btn btn-ghost" href="logo.svg" download="logo-64bits.svg">Descargar SVG original</a>
+    <p class="progress" id="progress">Renderizando…</p>
+  </div>
+
+  <p class="note">
+    <strong>Para merchandising:</strong> usá el SVG en Illustrator/Figma para tener calidad infinita y tipografía perfecta.
+    El PNG se genera a resolución seleccionada con fuentes del sistema.
+  </p>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const SVG_W = 280, SVG_H = 300;
+    let selectedPx = 2000;
+
+    // Toggle tamaño activo
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedPx = parseInt(btn.dataset.px, 10);
+      });
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', async () => {
+      const progress = document.getElementById('progress');
+      const btn = document.getElementById('exportBtn');
+      btn.disabled = true;
+      progress.style.display = 'block';
+      progress.textContent = 'Cargando fuentes…';
+
+      // Esperar a que carguen las fuentes
+      await document.fonts.ready;
+
+      // Leer el SVG como texto para incrustarlo directamente
+      let svgText;
+      try {
+        const resp = await fetch('logo.svg');
+        svgText = await resp.text();
+      } catch (e) {
+        // Fallback: usar la imagen preview ya cargada
+        svgText = null;
+      }
+
+      progress.textContent = 'Renderizando…';
+
+      const scale = selectedPx / SVG_W;
+      const outW = selectedPx;
+      const outH = Math.round(SVG_H * scale);
+
+      const canvas = document.getElementById('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, outW, outH);
+
+      const img = new Image();
+      img.width = outW;
+      img.height = outH;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        if (svgText) {
+          const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+          img.src = URL.createObjectURL(blob);
+        } else {
+          img.src = 'logo.svg';
+        }
+      });
+
+      ctx.drawImage(img, 0, 0, outW, outH);
+
+      // Descargar
+      canvas.toBlob(blob => {
+        const a = document.createElement('a');
+        a.download = `logo-64bits-${selectedPx}px.png`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+
+        progress.style.display = 'none';
+        btn.disabled = false;
+      }, 'image/png');
+    });
+  </script>
+
+</body>
+</html>

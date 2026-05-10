@@ -29,23 +29,93 @@ window.addEventListener('scroll', () => {
         : 'rgba(0, 0, 0, 0.75)';
 }, { passive: true });
 
-// Fade-in on scroll
-const observer = new IntersectionObserver((entries) => {
+// === WATERMARK PARALLAX ===
+
+const watermark = document.querySelector('.watermark');
+if (watermark) {
+    let rafPending = false;
+    const updateParallax = () => {
+        rafPending = false;
+        watermark.style.transform =
+            `translate(-50%, calc(-50% - ${window.scrollY * 0.25}px))`;
+    };
+    window.addEventListener('scroll', () => {
+        if (!rafPending) { rafPending = true; requestAnimationFrame(updateParallax); }
+    }, { passive: true });
+}
+
+// === SCROLL FADE-UP ===
+
+// Guardar valores de los stats antes de que cualquier animación los toque
+document.querySelectorAll('.stat-number').forEach(el => {
+    el.dataset.target = el.textContent.trim();
+});
+
+const fadeObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
+            entry.target.classList.add('visible');
+            fadeObs.unobserve(entry.target);
         }
     });
-}, { threshold: 0.1 });
+}, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
 
-document.querySelectorAll('.service-card, .feature, .step, .stat').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-});
+function registerFade(selector, baseDelay, perItem) {
+    document.querySelectorAll(selector).forEach((el, i) => {
+        el.classList.add('fade-up');
+        el.style.setProperty('--stagger', `${baseDelay + i * perItem}ms`);
+        fadeObs.observe(el);
+    });
+}
+
+registerFade('.section-eyebrow',   0,   0);
+registerFade('.section-title',    60,   0);
+registerFade('.section-subtitle', 120,  0);
+registerFade('.service-card',       0,  80);
+registerFade('.feature',            0,  65);
+registerFade('.step',               0,  90);
+registerFade('.stat',               0, 100);
+registerFade('.contact-info',       0,   0);
+registerFade('.contact-actions',  140,   0);
+
+// === ANIMATED COUNTERS ===
+
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+function runCounter(el, target) {
+    const start = performance.now();
+    const tick = (now) => {
+        const p = Math.min((now - start) / 1800, 1);
+        el.textContent = Math.round(easeOutCubic(p) * target);
+        if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+
+function runTypewriter(el, text) {
+    el.textContent = '';
+    let i = 0;
+    const iv = setInterval(() => {
+        el.textContent += text[i++];
+        if (i >= text.length) clearInterval(iv);
+    }, 85);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const numEl = entry.target.querySelector('.stat-number');
+        if (!numEl || numEl.dataset.counted) return;
+        numEl.dataset.counted = '1';
+        const raw = numEl.dataset.target || numEl.textContent.trim();
+        const num = parseInt(raw, 10);
+        if (!isNaN(num)) runCounter(numEl, num);
+        else              runTypewriter(numEl, raw);
+        counterObs.unobserve(entry.target);
+    });
+}, { threshold: 0.6 });
+
+document.querySelectorAll('.stat').forEach(el => counterObs.observe(el));
 
 // === MAT-IA CHAT ===
 

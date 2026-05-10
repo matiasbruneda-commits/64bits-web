@@ -14,6 +14,11 @@
 </head>
 <body>
 
+    <!-- Marca de agua con efecto parallax -->
+    <div class="watermark" aria-hidden="true">
+        <img src="Logo%20sin%20fondo.png" alt="">
+    </div>
+
     <!-- MAT-IA avatar reutilizable -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
         <symbol id="matia-avatar" viewBox="0 0 48 48">
@@ -38,7 +43,9 @@
     <!-- NAV -->
     <nav class="nav" id="nav">
         <div class="nav-container">
-            <a href="#" class="nav-logo"><span class="logo-bold">64 Bits</span><span class="logo-light"> Belgrano</span></a>
+            <a href="#" class="nav-logo" aria-label="64 Bits Belgrano — Inicio">
+                <img src="Logo%20sin%20fondo.png" alt="64 Bits Belgrano" class="nav-logo-img" width="37" height="40">
+            </a>
             <ul class="nav-links">
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
