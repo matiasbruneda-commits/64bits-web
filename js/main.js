@@ -137,6 +137,8 @@ registerFade('.service-card',       0,  80);
 registerFade('.feature',            0,  65);
 registerFade('.step',               0,  90);
 registerFade('.stat',               0, 100);
+registerFade('.testimonials-carousel', 0, 0);
+registerFade('.testimonials-cta',    80, 0);
 registerFade('.contact-info',       0,   0);
 registerFade('.contact-actions',  140,   0);
 
@@ -178,6 +180,45 @@ const counterObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.6 });
 
 document.querySelectorAll('.stat').forEach(el => counterObs.observe(el));
+
+// === TESTIMONIALS CAROUSEL ===
+(function () {
+    const track = document.getElementById('carouselTrack');
+    if (!track) return;
+
+    const cards   = track.querySelectorAll('.testimonial-card');
+    const dots    = document.querySelectorAll('.carousel-dot');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    let current = 0;
+    let timer;
+
+    function goTo(index) {
+        current = (index + cards.length) % cards.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    function startTimer() {
+        timer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        startTimer();
+    }
+
+    prevBtn.addEventListener('click', () => { goTo(current - 1); resetTimer(); });
+    nextBtn.addEventListener('click', () => { goTo(current + 1); resetTimer(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); resetTimer(); }));
+
+    const carousel = document.querySelector('.testimonials-carousel');
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', startTimer);
+
+    goTo(0);
+    startTimer();
+})();
 
 // === MAT-IA CHAT ===
 

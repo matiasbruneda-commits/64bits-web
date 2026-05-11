@@ -504,6 +504,110 @@ body {
     flex-shrink: 0;
 }
 
+/* === TESTIMONIALS === */
+.testimonials-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.carousel-track-wrap {
+    overflow: hidden;
+    flex: 1;
+    border-radius: var(--radius-lg);
+}
+
+.carousel-track {
+    display: flex;
+    will-change: transform;
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.testimonial-card {
+    min-width: 100%;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 56px 64px;
+    text-align: center;
+}
+
+.testimonial-stars {
+    display: block;
+    color: var(--accent);
+    font-size: 22px;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+}
+
+.testimonial-text {
+    display: block;
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-primary);
+    line-height: 1.75;
+    margin: 0 auto 28px;
+    max-width: 700px;
+    font-style: italic;
+}
+
+.testimonial-name {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.carousel-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.carousel-btn:hover {
+    border-color: rgba(0, 113, 227, 0.4);
+    color: var(--accent);
+    background: rgba(0, 113, 227, 0.06);
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+}
+
+.carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: var(--accent);
+    width: 22px;
+}
+
+.testimonials-cta {
+    text-align: center;
+}
+
 /* === CONTACT === */
 .contact-grid {
     display: grid;
@@ -926,6 +1030,9 @@ a.contact-value:hover { color: var(--accent); }
 }
 
 @media (max-width: 680px) {
+    .testimonial-card { padding: 36px 28px; }
+    .carousel-btn { display: none; }
+
     .hero {
         flex-direction: column;
         text-align: center;
@@ -972,6 +1079,9 @@ a.contact-value:hover { color: var(--accent); }
 }
 
 @media (max-width: 400px) {
+    .testimonial-card { padding: 28px 20px; }
+    .testimonial-text { font-size: 15px; }
+
     .hero-title { font-size: 38px; }
     .hero-actions { align-items: stretch; }
     .matia-btn { justify-content: center; }
