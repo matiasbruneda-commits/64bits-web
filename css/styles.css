@@ -168,10 +168,10 @@ body {
 
 /* === HERO === */
 .hero {
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     align-items: center;
-    padding: calc(var(--nav-h) + 60px) 24px 80px;
+    padding: calc(var(--nav-h) + 60px) 24px 2rem;
     max-width: 1080px;
     margin: 0 auto;
     gap: 60px;
