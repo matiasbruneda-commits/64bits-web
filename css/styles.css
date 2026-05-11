@@ -292,7 +292,7 @@ body {
 
 /* === SECTIONS === */
 .section { padding: 100px 0; }
-.section-alt { background: var(--bg-alt); }
+.section-alt { background: transparent; }
 
 .section-header {
     text-align: center;
