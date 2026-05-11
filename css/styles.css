@@ -1068,7 +1068,7 @@ a.contact-value:hover { color: var(--accent); }
     left: 50%;
     transform: translate(-50%, -50%);
     width: 48vw;
-    opacity: 0.08;
+    opacity: 0.15;
     pointer-events: none;
     user-select: none;
     z-index: 0;
@@ -1116,8 +1116,6 @@ a.contact-value:hover { color: var(--accent); }
    sobre el contenido no posicionado pero pointer-events: none lo hace transparente a clics */
 
 .trust-bar {
-  border-top: 1px solid #1e1e1e;
-  border-bottom: 1px solid #1e1e1e;
   padding: 1rem 0;
 }
 .trust-bar-inner {
@@ -1137,8 +1135,4 @@ a.contact-value:hover { color: var(--accent); }
   font-size: 13px;
   color: #aaa;
 }
-.trust-divider {
-  width: 1px;
-  height: 16px;
-  background: #2a2a2a;
-}
+.trust-divider { display: none; }
