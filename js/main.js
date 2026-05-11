@@ -68,25 +68,33 @@ const onScrollRAF = () => {
         if (heroVisual)  heroVisual.style.opacity  = val;
     }
 
-    // Fade-out global: cada elemento .fade-up desvanece al salir por arriba del viewport.
-    // Se usa opacidad directa (sin CSS transition) para que esté sincronizado con el scroll.
+    // Fade bidireccional: desvanece al salir por arriba, reaparece al volver.
+    // Sincronizado frame a frame con el scroll (sin CSS transition lag).
     if (fadeEls.length) {
-        const exitZone = viewH * 0.22;
-        // Batch read: todos los rects juntos para evitar layout thrashing
-        const bottoms = fadeEls.map(el =>
-            el.classList.contains('fade-seen') ? el.getBoundingClientRect().bottom : Infinity
+        const fadeZone = viewH * 0.45; // zona de fade: bottom del elemento cruza el 45% superior
+
+        // Batch read — todos los rects juntos para evitar layout thrashing
+        const rects = fadeEls.map(el =>
+            el.classList.contains('fade-seen') ? el.getBoundingClientRect() : null
         );
-        // Batch write: aplicar opacidades
+
+        // Batch write
         fadeEls.forEach((el, i) => {
-            const b = bottoms[i];
-            if (b === Infinity) return;
-            if (b < exitZone) {
-                el.style.opacity    = String(Math.max(0, b / exitZone));
-                el.style.transition = 'none'; // sin lag: sincronizado con el dedo/scroll
-            } else if (el.style.transition === 'none') {
-                el.style.opacity    = '';     // CSS .visible controla la opacidad
-                el.style.transition = '';     // restaura transición para re-entrada suave
+            const rect = rects[i];
+            if (!rect) return; // todavía no apareció en pantalla
+
+            const { top, bottom } = rect;
+
+            if (bottom <= fadeZone) {
+                // Saliendo por arriba o re-entrando desde arriba — control directo
+                el.style.opacity    = String(Math.max(0, bottom / fadeZone));
+                el.style.transition = 'none';
+            } else if (el.style.transition === 'none' && top < viewH) {
+                // Volvió al área visible desde la zona de fade — devuelve control al CSS
+                el.style.transition = '';
+                el.style.opacity    = '';
             }
+            // Por debajo del viewport o controlado por CSS: no tocar
         });
     }
 };
