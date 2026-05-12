@@ -1070,7 +1070,7 @@ a.contact-value:hover { color: var(--accent); }
     left: 50%;
     transform: translate(-50%, -50%);
     width: 48vw;
-    opacity: 0.15;
+    opacity: 0.06;
     pointer-events: none;
     user-select: none;
     z-index: 0;
@@ -1201,13 +1201,13 @@ a.contact-value:hover { color: var(--accent); }
 .faq-item.open .faq-answer { max-height: 200px; }
 
 /* === QUIEN SOY === */
-.quien-soy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 4rem; }
+.quien-soy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 4rem; position: relative; z-index: 1; }
 .foto-matias { width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; filter: grayscale(20%); }
 .quien-soy-text { color: #aaa; font-size: 15px; line-height: 1.8; margin-bottom: 1rem; }
 .quien-soy-pilares { display: flex; flex-direction: column; gap: 8px; margin-top: 1.5rem; }
 .pilar { font-size: 14px; color: #ddd; display: flex; align-items: center; gap: 8px; }
 .pilar-icon { color: #F5C518; font-weight: 700; }
-.antes-despues { margin-top: 2rem; }
+.antes-despues { margin-top: 2rem; position: relative; z-index: 1; }
 .antes-despues-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: center; }
 .ad-item img { width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 16/9; }
 .ad-label { text-align: center; font-size: 13px; color: #888; margin-top: 8px; }
