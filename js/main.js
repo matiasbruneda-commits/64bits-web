@@ -300,3 +300,13 @@ chatInput.addEventListener('keydown', (e) => {
 chatInput.addEventListener('input', () => {
     chatSend.disabled = !chatInput.value.trim();
 });
+
+// === FAQ ACCORDION ===
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-question').setAttribute('aria-expanded', 'false'); });
+    if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+  });
+});
