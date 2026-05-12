@@ -80,6 +80,7 @@ const fadeInObs = new IntersectionObserver((entries) => {
 
 function registerFade(selector, baseDelay, perItem, animClass = 'fade-up') {
     document.querySelectorAll(selector).forEach((el, i) => {
+        if (el.classList.contains('no-fade')) return;
         el.classList.add(animClass);
         el.style.setProperty('--stagger', `${baseDelay + i * perItem}ms`);
         fadeInObs.observe(el);

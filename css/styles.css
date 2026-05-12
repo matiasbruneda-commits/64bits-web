@@ -1218,3 +1218,6 @@ a.contact-value:hover { color: var(--accent); }
   .antes-despues-grid { grid-template-columns: 1fr; }
   .ad-arrow { transform: rotate(90deg); }
 }
+
+/* === NO FADE === */
+.no-fade { opacity: 1 !important; transform: none !important; }
