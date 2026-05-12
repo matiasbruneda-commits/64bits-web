@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditoría SEO v2 — 64 Bits Belgrano</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f; --bg-card: #13131a; --bg-card2: #1a1a24;
+    --border: rgba(255,255,255,0.07); --text: #f0f0f5; --muted: #888;
+    --green: #22c55e; --yellow: #eab308; --red: #ef4444;
+    --blue: #3b82f6; --accent: #6366f1;
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HEADER */
+  .header { margin-bottom: 36px; }
+  .header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  .header h1 span { color: var(--accent); }
+  .header-meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .keyword-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: #a5b4fc; margin-top: 10px; }
+  .version-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: var(--green); margin-top: 10px; margin-left: 8px; }
+
+  /* SCORE COMPARISON */
+  .score-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .score-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 32px; display: flex; align-items: center; gap: 24px; }
+  .score-box.current { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.04); }
+  .score-box.prev { opacity: 0.65; }
+  .gauge-wrap { position: relative; width: 110px; height: 110px; flex-shrink: 0; }
+  .gauge-wrap svg { transform: rotate(-90deg); }
+  .gauge-bg   { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 12; }
+  .gauge-fill { fill: none; stroke-width: 12; stroke-linecap: round; }
+  .gauge-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .gauge-number { font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .gauge-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .score-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .score-text p  { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .delta-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); border-radius: 999px; padding: 3px 10px; font-size: 13px; font-weight: 800; margin-top: 10px; }
+
+  /* TECH PILLS */
+  .tech-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .pill-green  { background: rgba(34,197,94,0.12);  color: var(--green);  border: 1px solid rgba(34,197,94,0.2); }
+  .pill-red    { background: rgba(239,68,68,0.12);   color: var(--red);    border: 1px solid rgba(239,68,68,0.2); }
+  .pill-yellow { background: rgba(234,179,8,0.12);   color: var(--yellow); border: 1px solid rgba(234,179,8,0.2); }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* FIXES APPLIED */
+  .fixes-applied { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 36px; }
+  .fix-item { display: flex; align-items: flex-start; gap: 10px; background: var(--bg-card); border: 1px solid rgba(34,197,94,0.15); border-radius: 12px; padding: 14px 16px; }
+  .fix-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .fix-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .fix-item p  { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+  /* TECH SNAPSHOT */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 36px; }
+  .tech-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .tech-card-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .tech-card-val   { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; }
+  .tech-card-note  { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .score-green  { color: var(--green); }
+  .score-yellow { color: var(--yellow); }
+  .score-red    { color: var(--red); }
+
+  /* CATEGORIES */
+  .categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 36px; }
+  .cat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; }
+  .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .cat-name   { font-size: 13px; font-weight: 700; }
+  .cat-score-wrap { display: flex; align-items: baseline; gap: 6px; }
+  .cat-score  { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; }
+  .cat-prev   { font-size: 11px; color: var(--muted); text-decoration: line-through; }
+  .cat-delta  { font-size: 11px; font-weight: 700; }
+  .delta-up   { color: var(--green); }
+  .delta-same { color: var(--muted); }
+  .progress-bar  { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; margin: 10px 0 14px; overflow: hidden; }
+  .progress-prev { height: 5px; background: rgba(255,255,255,0.04); border-radius: 3px; margin-bottom: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; }
+  .fill-green  { background: var(--green); }
+  .fill-yellow { background: var(--yellow); }
+  .fill-red    { background: var(--red); }
+  .fill-muted  { background: rgba(255,255,255,0.2); }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .check-list li { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .check-list li span.icon { flex-shrink: 0; margin-top: 1px; }
+  .ok   { color: var(--green); }
+  .warn { color: var(--yellow); }
+  .fail { color: var(--red); }
+  .new-tag { font-size: 10px; font-weight: 700; background: rgba(34,197,94,0.15); color: var(--green); border-radius: 4px; padding: 1px 5px; margin-left: 4px; }
+
+  /* REMAINING ISSUES */
+  .remaining { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+  .remaining-item { display: grid; grid-template-columns: 28px 1fr auto; align-items: start; gap: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+  .r-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .p-yellow { background: rgba(234,179,8,0.18); color: var(--yellow); }
+  .p-red    { background: rgba(239,68,68,0.2);  color: var(--red); }
+  .remaining-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .remaining-item p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .remaining-item code { background: rgba(255,255,255,0.07); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: #a5b4fc; font-family: monospace; }
+  .impact { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .impact-high     { background: rgba(234,179,8,0.15);  color: var(--yellow); border: 1px solid rgba(234,179,8,0.25); }
+  .impact-critical { background: rgba(239,68,68,0.15);  color: var(--red);    border: 1px solid rgba(239,68,68,0.25); }
+  .impact-low      { background: rgba(99,102,241,0.12); color: #a5b4fc;       border: 1px solid rgba(99,102,241,0.25); }
+
+  /* CODE FIX */
+  .fix-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; }
+  .fix-title { font-size: 12px; font-weight: 700; margin-bottom: 10px; color: #a5b4fc; }
+  pre { background: #0d0d14; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #c9d1d9; overflow-x: auto; line-height: 1.6; font-family: 'Consolas','Courier New',monospace; }
+  .hl-tag { color: #7ee787; } .hl-attr { color: #79c0ff; } .hl-str { color: #f0883e; }
+  .hl-key { color: #ff7b72; } .hl-com { color: #8b949e; }
+
+  /* FOOTER */
+  .audit-footer { border-top: 1px solid var(--border); padding-top: 24px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  @media (max-width: 640px) {
+    .score-compare { grid-template-columns: 1fr; }
+    .score-box { flex-direction: column; align-items: flex-start; }
+    .remaining-item { grid-template-columns: 28px 1fr; }
+    .impact { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Auditoría SEO — <span>64 Bits Belgrano</span></h1>
+    <p class="header-meta">🌐 https://www.64bits.com.ar &nbsp;·&nbsp; Fecha: 12 de mayo 2026 &nbsp;·&nbsp; Análisis post-correcciones</p>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+      <div class="keyword-badge">🎯 Keyword: "reparación iPhone MacBook Belgrano"</div>
+      <div class="version-badge">✦ Versión 2 — Post-fix</div>
+    </div>
+  </div>
+
+  <!-- SCORE COMPARISON -->
+  <p class="section-title">Comparativa de puntaje</p>
+  <div class="score-compare">
+
+    <div class="score-box current">
+      <div class="gauge-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle class="gauge-bg" cx="55" cy="55" r="44"/>
+          <!-- 82/100 → circ=2π*44≈276.46 → fill=226.7 → offset=49.7 -->
+          <circle class="gauge-fill" cx="55" cy="55" r="44" stroke="#22c55e" stroke-dasharray="276.46" stroke-dashoffset="49.76"/>
+        </svg>
+        <div class="gauge-label">
+          <span class="gauge-number" style="color:#22c55e">82</span>
+          <span class="gauge-sub">/ 100</span>
+        </div>
+      </div>
+      <div class="score-text">
+        <h3>Score Actual — v2</h3>
+        <p>Las correcciones aplicadas resolvieron los problemas más críticos: canonical, schema con estrellas y seguridad en enlaces.</p>
+        <div class="delta-badge">▲ +15 puntos vs v1</div>
+        <div class="tech-pills" style="margin-top:10px;">
+          <span class="pill pill-green"><span class="dot"></span>Canonical ✓</span>
+          <span class="pill pill-green"><span class="dot"></span>AggregateRating ✓</span>
+          <span class="pill pill-green"><span class="dot"></span>Twitter Cards ✓</span>
+          <span class="pill pill-green"><span class="dot"></span>noopener ✓</span>
+          <span class="pill pill-yellow"><span class="dot"></span>H1 sin keyword</span>
+          <span class="pill pill-yellow"><span class="dot"></span>Sin FAQ schema</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="score-box prev">
+      <div class="gauge-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle class="gauge-bg" cx="55" cy="55" r="44"/>
+          <!-- 67/100 → fill=185.2 → offset=91.24 -->
+          <circle class="gauge-fill" cx="55" cy="55" r="44" stroke="#eab308" stroke-dasharray="276.46" stroke-dashoffset="91.24"/>
+        </svg>
+        <div class="gauge-label">
+          <span class="gauge-number" style="color:#eab308">67</span>
+          <span class="gauge-sub">/ 100</span>
+        </div>
+      </div>
+      <div class="score-text">
+        <h3>Score Anterior — v1</h3>
+        <p>Sin canonical, sin Twitter Cards, schema incompleto, 11 links sin noopener, sin AggregateRating.</p>
+        <div class="tech-pills" style="margin-top:10px;">
+          <span class="pill pill-red"><span class="dot"></span>Sin canonical</span>
+          <span class="pill pill-red"><span class="dot"></span>Sin estrellas schema</span>
+          <span class="pill pill-red"><span class="dot"></span>11 links inseguros</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FIXES APPLIED -->
+  <p class="section-title">Correcciones aplicadas en esta versión</p>
+  <div class="fixes-applied">
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>Tag canonical</h4>
+        <p><code>&lt;link rel="canonical"&gt;</code> apunta a <code>https://www.64bits.com.ar/</code>. Elimina riesgo de contenido duplicado.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>AggregateRating en Schema</h4>
+        <p>4.8★ con 148 reseñas ahora en el JSON-LD. Google puede mostrar estrellas en los resultados de búsqueda.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>Twitter Cards completas</h4>
+        <p><code>twitter:card</code>, <code>title</code>, <code>description</code> e <code>image</code> agregados. Mejora sharing en Twitter/X.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>og:locale + og:site_name</h4>
+        <p>Locale <code>es_AR</code> y site_name "64 Bits Belgrano" para mejor targeting regional en Facebook/WhatsApp.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>Schema LocalBusiness completo</h4>
+        <p>Agregados: <code>@id</code>, <code>streetAddress</code>, <code>geo</code>, <code>openingHours</code>, <code>sameAs</code>, <code>image</code>.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>rel="noopener noreferrer" en 11 enlaces</h4>
+        <p>Todos los links con <code>target="_blank"</code> ahora son seguros. Cierra vulnerabilidad de tabnapping.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>loading="lazy" + width/height en logo hero</h4>
+        <p>Reduce Cumulative Layout Shift (CLS) y mejora tiempo de carga percibido.</p>
+      </div>
+    </div>
+    <div class="fix-item">
+      <span class="fix-icon">✅</span>
+      <div>
+        <h4>+148 reseñas visible en la página</h4>
+        <p>Consistencia entre el texto visible y el <code>reviewCount</code> del schema.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH SNAPSHOT -->
+  <p class="section-title">Métricas técnicas</p>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-card-label">HTTP Status</div>
+      <div class="tech-card-val score-green">200</div>
+      <div class="tech-card-note">HTTPS activo ✓</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-label">Tiempo total</div>
+      <div class="tech-card-val score-green">222 ms</div>
+      <div class="tech-card-note">↓ 102ms vs v1 (324ms)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-label">TTFB</div>
+      <div class="tech-card-val score-green">216 ms</div>
+      <div class="tech-card-note">Excelente</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-label">Tamaño HTML</div>
+      <div class="tech-card-val score-yellow">42.6 KB</div>
+      <div class="tech-card-note">+1.4KB vs v1 (41KB)</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-label">Canonical</div>
+      <div class="tech-card-val score-green">✓</div>
+      <div class="tech-card-note">Corregido en v2</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-card-label">Twitter Card</div>
+      <div class="tech-card-val score-green">✓</div>
+      <div class="tech-card-note">Corregido en v2</div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES V2 VS V1 -->
+  <p class="section-title">Desglose por categoría — v2 vs v1</p>
+  <div class="categories">
+
+    <!-- META TAGS -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">🏷️ Meta Tags</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">68</span>
+          <span class="cat-score score-green">92</span>
+          <span class="cat-delta delta-up">+24</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:92%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> Title (52 chars) y meta description (155 chars)</li>
+        <li><span class="icon ok">✓</span> Canonical <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> og:locale es_AR + og:site_name <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> Twitter Cards completas <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> Google verification, charset, viewport</li>
+        <li><span class="icon warn">~</span> Meta robots no declarado (comportamiento implícito OK)</li>
+      </ul>
+    </div>
+
+    <!-- HEADINGS -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">📐 Headings</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">65</span>
+          <span class="cat-score score-yellow">65</span>
+          <span class="cat-delta delta-same">±0</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:65%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> Un solo H1 en página</li>
+        <li><span class="icon ok">✓</span> H2 hero-seo contiene la keyword completa</li>
+        <li><span class="icon ok">✓</span> Jerarquía H1→H2→H3→H4 correcta</li>
+        <li><span class="icon fail">✗</span> H1 no contiene "reparación iPhone MacBook Belgrano"</li>
+        <li><span class="icon warn">~</span> Ningún heading combina las tres palabras clave</li>
+      </ul>
+    </div>
+
+    <!-- IMÁGENES -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">🖼️ Imágenes</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">52</span>
+          <span class="cat-score score-yellow">62</span>
+          <span class="cat-delta delta-up">+10</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:62%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> Alt descriptivo en logo</li>
+        <li><span class="icon ok">✓</span> loading="lazy" en logo hero <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> width/height en logo hero (anti-CLS) <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon fail">✗</span> Sin formato WebP</li>
+        <li><span class="icon fail">✗</span> Nombre archivo "Logo sin fondo.png" poco descriptivo</li>
+        <li><span class="icon warn">~</span> Nav logo sin lazy (OK, está above the fold)</li>
+      </ul>
+    </div>
+
+    <!-- ENLACES -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">🔗 Enlaces</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">62</span>
+          <span class="cat-score score-green">88</span>
+          <span class="cat-delta delta-up">+26</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:88%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> Todos los links tienen rel="noopener noreferrer" <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> Navegación interna completa</li>
+        <li><span class="icon ok">✓</span> Links a WhatsApp, Maps, Instagram</li>
+        <li><span class="icon ok">✓</span> Sin enlaces rotos</li>
+        <li><span class="icon warn">~</span> Sin sección de contenido para links internos</li>
+        <li><span class="icon warn">~</span> Sin links a directorios de autoridad local</li>
+      </ul>
+    </div>
+
+    <!-- OPEN GRAPH -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">📊 Open Graph</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">75</span>
+          <span class="cat-score score-green">95</span>
+          <span class="cat-delta delta-up">+20</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:95%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> og:title, description, type, url, image (1200×630)</li>
+        <li><span class="icon ok">✓</span> og:locale es_AR <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> og:site_name <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> Twitter Cards completas <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon warn">~</span> og:url sin trailing slash (canonical sí lo tiene)</li>
+      </ul>
+    </div>
+
+    <!-- SCHEMA -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">🧩 Schema / JSON-LD</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">58</span>
+          <span class="cat-score score-green">92</span>
+          <span class="cat-delta delta-up">+34</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:92%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> @id, streetAddress, geo, openingHours <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> sameAs Instagram, image <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> AggregateRating 4.8★ / 148 reseñas <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> name, url, telephone, address, areaServed</li>
+        <li><span class="icon fail">✗</span> Sin FAQ schema (featured snippet perdido)</li>
+        <li><span class="icon warn">~</span> Sin Review schema individual por testimonio</li>
+      </ul>
+    </div>
+
+    <!-- TÉCNICO -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">⚙️ Técnico</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">80</span>
+          <span class="cat-score score-green">88</span>
+          <span class="cat-delta delta-up">+8</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:88%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> HTTPS 200 OK, 222ms (mejoró 102ms)</li>
+        <li><span class="icon ok">✓</span> Canonical presente <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> robots.txt, sitemap.xml, favicon</li>
+        <li><span class="icon ok">✓</span> lazy loading en imágenes below-fold <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon fail">✗</span> sitemap.xml sin lastmod ni changefreq</li>
+        <li><span class="icon warn">~</span> Sin WebP (solo PNG)</li>
+      </ul>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="cat-card">
+      <div class="cat-header">
+        <span class="cat-name">📝 Contenido</span>
+        <div class="cat-score-wrap">
+          <span class="cat-prev">72</span>
+          <span class="cat-score score-yellow">74</span>
+          <span class="cat-delta delta-up">+2</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:74%"></div></div>
+      <ul class="check-list">
+        <li><span class="icon ok">✓</span> Keyword en title, description y H2</li>
+        <li><span class="icon ok">✓</span> +148 reseñas visible y en schema <span class="new-tag">NUEVO</span></li>
+        <li><span class="icon ok">✓</span> Señales locales fuertes, 6 testimonios reales</li>
+        <li><span class="icon fail">✗</span> H1 no contiene keyword objetivo</li>
+        <li><span class="icon fail">✗</span> Sin sección FAQ (featured snippet)</li>
+        <li><span class="icon warn">~</span> Sin blog para keywords de cola larga</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- REMAINING ISSUES -->
+  <p class="section-title">Issues pendientes para v3</p>
+  <div class="remaining">
+
+    <div class="remaining-item">
+      <div class="r-num p-red">1</div>
+      <div>
+        <h4>Reescribir el H1 con la keyword objetivo</h4>
+        <p>Es el único fix crítico que quedó sin resolver. El H1 "Cuando otros se rinden, nosotros trabajamos." es buen copy pero nulo para SEO. Sugerencia: <code>Reparación de iPhone y MacBook en Belgrano</code> como H1, y mover el copy actual a un subtítulo o eyebrow.</p>
+      </div>
+      <span class="impact impact-critical">CRÍTICO</span>
+    </div>
+
+    <div class="remaining-item">
+      <div class="r-num p-red">2</div>
+      <div>
+        <h4>Agregar sección FAQ con schema</h4>
+        <p>Una sección de preguntas frecuentes con <code>FAQPage</code> en JSON-LD permite a Google mostrar las respuestas directamente en la SERP (featured snippet), aumentando visibilidad sin necesidad de subir posición.</p>
+      </div>
+      <span class="impact impact-critical">ALTO</span>
+    </div>
+
+    <div class="remaining-item">
+      <div class="r-num p-yellow">3</div>
+      <div>
+        <h4>Actualizar sitemap.xml con lastmod y changefreq</h4>
+        <p>Agregar <code>&lt;lastmod&gt;2026-05-12&lt;/lastmod&gt;</code> y <code>&lt;changefreq&gt;monthly&lt;/changefreq&gt;</code>. Ayuda a Googlebot a priorizar el rastreo correctamente.</p>
+      </div>
+      <span class="impact impact-high">MEDIO</span>
+    </div>
+
+    <div class="remaining-item">
+      <div class="r-num p-yellow">4</div>
+      <div>
+        <h4>Convertir imágenes a WebP</h4>
+        <p>El logo "Logo sin fondo.png" (203KB) puede reducirse significativamente en WebP. Además, renombrar el archivo a algo descriptivo como <code>64bits-belgrano-logo.webp</code> es una señal SEO menor pero positiva.</p>
+      </div>
+      <span class="impact impact-high">MEDIO</span>
+    </div>
+
+    <div class="remaining-item">
+      <div class="r-num p-yellow">5</div>
+      <div>
+        <h4>og:url consistencia con canonical</h4>
+        <p>El canonical apunta a <code>https://www.64bits.com.ar/</code> (con trailing slash) pero <code>og:url</code> usa <code>https://www.64bits.com.ar</code> (sin trailing slash). Deberían ser idénticos.</p>
+      </div>
+      <span class="impact impact-low">MENOR</span>
+    </div>
+
+  </div>
+
+  <!-- CODE FIX for remaining -->
+  <p class="section-title">Código listo para los issues pendientes</p>
+
+  <div class="fix-block">
+    <div class="fix-title">Fix pendiente #2 — FAQ Schema (agregar en &lt;head&gt; como segundo script ld+json)</div>
+    <pre><span class="hl-tag">&lt;script</span> <span class="hl-attr">type</span>=<span class="hl-str">"application/ld+json"</span><span class="hl-tag">&gt;</span>
+{
+  <span class="hl-key">"@context"</span>: <span class="hl-str">"https://schema.org"</span>,
+  <span class="hl-key">"@type"</span>: <span class="hl-str">"FAQPage"</span>,
+  <span class="hl-key">"mainEntity"</span>: [
+    {
+      <span class="hl-key">"@type"</span>: <span class="hl-str">"Question"</span>,
+      <span class="hl-key">"name"</span>: <span class="hl-str">"¿Cuánto tarda la reparación de un iPhone?"</span>,
+      <span class="hl-key">"acceptedAnswer"</span>: { <span class="hl-key">"@type"</span>: <span class="hl-str">"Answer"</span>,
+        <span class="hl-key">"text"</span>: <span class="hl-str">"En general entre 2 y 7 días hábiles según la complejidad de la falla. Te lo confirmamos al hacer el diagnóstico."</span> }
+    },
+    {
+      <span class="hl-key">"@type"</span>: <span class="hl-str">"Question"</span>,
+      <span class="hl-key">"name"</span>: <span class="hl-str">"¿El diagnóstico tiene costo?"</span>,
+      <span class="hl-key">"acceptedAnswer"</span>: { <span class="hl-key">"@type"</span>: <span class="hl-str">"Answer"</span>,
+        <span class="hl-key">"text"</span>: <span class="hl-str">"El diagnóstico es sin cargo si no hay reparación viable. Nunca cobramos trabajo que no podemos garantizar."</span> }
+    },
+    {
+      <span class="hl-key">"@type"</span>: <span class="hl-str">"Question"</span>,
+      <span class="hl-key">"name"</span>: <span class="hl-str">"¿Dónde están ubicados en Belgrano?"</span>,
+      <span class="hl-key">"acceptedAnswer"</span>: { <span class="hl-key">"@type"</span>: <span class="hl-str">"Answer"</span>,
+        <span class="hl-key">"text"</span>: <span class="hl-str">"Estamos en Ciudad de la Paz 2347, local 63, Belgrano, CABA. Atendemos de lunes a viernes de 10 a 18hs."</span> }
+    },
+    {
+      <span class="hl-key">"@type"</span>: <span class="hl-str">"Question"</span>,
+      <span class="hl-key">"name"</span>: <span class="hl-str">"¿Reparan MacBook que no enciende?"</span>,
+      <span class="hl-key">"acceptedAnswer"</span>: { <span class="hl-key">"@type"</span>: <span class="hl-str">"Answer"</span>,
+        <span class="hl-key">"text"</span>: <span class="hl-str">"Sí, somos especialistas en reparación de placas lógicas de MacBook Air y Pro a nivel de componente. Sin reemplazo innecesario de placa completa."</span> }
+    }
+  ]
+}
+<span class="hl-tag">&lt;/script&gt;</span></pre>
+  </div>
+
+  <div class="fix-block">
+    <div class="fix-title">Fix pendiente #3 — sitemap.xml actualizado</div>
+    <pre><span class="hl-tag">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="hl-tag">&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;</span>
+  <span class="hl-tag">&lt;url&gt;</span>
+    <span class="hl-tag">&lt;loc&gt;</span>https://www.64bits.com.ar/<span class="hl-tag">&lt;/loc&gt;</span>
+    <span class="hl-tag">&lt;lastmod&gt;</span>2026-05-12<span class="hl-tag">&lt;/lastmod&gt;</span>
+    <span class="hl-tag">&lt;changefreq&gt;</span>monthly<span class="hl-tag">&lt;/changefreq&gt;</span>
+    <span class="hl-tag">&lt;priority&gt;</span>1.0<span class="hl-tag">&lt;/priority&gt;</span>
+  <span class="hl-tag">&lt;/url&gt;</span>
+<span class="hl-tag">&lt;/urlset&gt;</span></pre>
+  </div>
+
+  <div class="fix-block">
+    <div class="fix-title">Fix pendiente #5 — og:url con trailing slash (consistencia con canonical)</div>
+    <pre><span class="hl-tag">&lt;meta</span> <span class="hl-attr">property</span>=<span class="hl-str">"og:url"</span> <span class="hl-attr">content</span>=<span class="hl-str">"https://www.64bits.com.ar/"</span><span class="hl-tag">&gt;</span></pre>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="audit-footer">
+    <span>Auditoría SEO v2 — 64 Bits Belgrano · 12 de mayo 2026</span>
+    <span>Score: 67/100 → 82/100 (+15 pts) · Keyword: "reparación iPhone MacBook Belgrano"</span>
+  </div>
+
+</div>
+</body>
+</html>
