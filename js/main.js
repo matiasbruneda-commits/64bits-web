@@ -29,17 +29,10 @@ window.addEventListener('scroll', () => {
         : 'rgba(0, 0, 0, 0.75)';
 }, { passive: true });
 
-// === SCROLL: PARALLAX + HERO FADE-OUT + FADE-OUT GLOBAL ===
+// === SCROLL: PARALLAX ===
 
-const watermark   = document.querySelector('.watermark');
-const heroContent = document.querySelector('.hero-content');
-const heroVisual  = document.querySelector('.hero-visual');
-const heroEl      = document.querySelector('.hero');
+const watermark = document.querySelector('.watermark');
 
-// Declarado aquí para que onScrollRAF lo vea; se llena en registerFade()
-const fadeEls = [];
-
-// Cachear maxScroll para el parallax bidireccional
 let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 window.addEventListener('resize', () => {
     maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -51,51 +44,10 @@ const onScrollRAF = () => {
     const sy    = window.scrollY;
     const viewH = window.innerHeight;
 
-    // Parallax bidireccional: empieza 20% por debajo del centro al cargar,
-    // cruza el centro exacto a mitad de página, termina 20% por encima al final.
     if (watermark) {
         const progress = maxScroll > 0 ? sy / maxScroll : 0;
         const vOffset  = (0.5 - progress) * viewH * 0.4;
         watermark.style.transform = `translate(-50%, calc(-50% + ${vOffset}px))`;
-    }
-
-    // Hero: fade-out al hacer scroll, fade-in al volver
-    if (heroEl) {
-        const heroH = heroEl.offsetHeight;
-        const fade  = sy > 0 ? Math.max(0, 1 - sy / (heroH * 0.55)) : null;
-        const val   = fade !== null ? String(fade) : '';
-        if (heroContent) heroContent.style.opacity = val;
-        if (heroVisual)  heroVisual.style.opacity  = val;
-    }
-
-    // Fade bidireccional: desvanece al salir por arriba, reaparece al volver.
-    // Sincronizado frame a frame con el scroll (sin CSS transition lag).
-    if (fadeEls.length) {
-        const fadeZone = viewH * 0.45; // zona de fade: bottom del elemento cruza el 45% superior
-
-        // Batch read — todos los rects juntos para evitar layout thrashing
-        const rects = fadeEls.map(el =>
-            el.classList.contains('fade-seen') ? el.getBoundingClientRect() : null
-        );
-
-        // Batch write
-        fadeEls.forEach((el, i) => {
-            const rect = rects[i];
-            if (!rect) return; // todavía no apareció en pantalla
-
-            const { top, bottom } = rect;
-
-            if (bottom <= fadeZone) {
-                // Saliendo por arriba o re-entrando desde arriba — control directo
-                el.style.opacity    = String(Math.max(0, bottom / fadeZone));
-                el.style.transition = 'none';
-            } else if (el.style.transition === 'none' && top < viewH) {
-                // Volvió al área visible desde la zona de fade — devuelve control al CSS
-                el.style.transition = '';
-                el.style.opacity    = '';
-            }
-            // Por debajo del viewport o controlado por CSS: no tocar
-        });
     }
 };
 
@@ -110,45 +62,42 @@ document.querySelectorAll('.stat-number').forEach(el => {
     el.dataset.target = el.textContent.trim();
 });
 
-// Fade-IN: IntersectionObserver gestiona la primera aparición desde abajo.
-// El fade-OUT lo maneja onScrollRAF con opacidad directa sincronizada con el scroll.
 const fadeInObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const el = entry.target;
-        el.classList.add('visible', 'fade-seen');
-        // Reset del stagger delay tras completar la animación inicial,
-        // así las re-apariciones no tienen delay artificial
+        el.classList.add('visible');
+        fadeInObs.unobserve(el);
         if (!el.dataset.staggerDone) {
             const delay = parseInt(el.style.getPropertyValue('--stagger') || '0', 10);
             setTimeout(() => {
                 el.style.setProperty('--stagger', '0ms');
                 el.dataset.staggerDone = '1';
-            }, delay + 950);
+            }, delay + 700);
         }
     });
 }, { threshold: 0.08 });
 
-function registerFade(selector, baseDelay, perItem) {
+function registerFade(selector, baseDelay, perItem, animClass = 'fade-up') {
     document.querySelectorAll(selector).forEach((el, i) => {
-        el.classList.add('fade-up');
+        el.classList.add(animClass);
         el.style.setProperty('--stagger', `${baseDelay + i * perItem}ms`);
         fadeInObs.observe(el);
-        fadeEls.push(el); // registrar para fade-out global en onScrollRAF
     });
 }
 
-registerFade('.section-eyebrow',   0,   0);
-registerFade('.section-title',    60,   0);
-registerFade('.section-subtitle', 120,  0);
-registerFade('.service-card',       0,  80);
-registerFade('.feature',            0,  65);
-registerFade('.step',               0,  90);
-registerFade('.stat',               0, 100);
-registerFade('.testimonials-carousel', 0, 0);
-registerFade('.testimonials-cta',    80, 0);
-registerFade('.contact-info',       0,   0);
-registerFade('.contact-actions',  140,   0);
+registerFade('.section-eyebrow',       0,   0);
+registerFade('.section-title',        60,   0);
+registerFade('.section-subtitle',    120,   0);
+registerFade('.service-card',          0,  70, 'scale-up');
+registerFade('.feature',               0,  55);
+registerFade('.step',                  0,  90);
+registerFade('.stat',                  0,  80);
+registerFade('.trust-item',            0,  60);
+registerFade('.testimonials-carousel', 0,   0, 'fade-in');
+registerFade('.testimonials-cta',     80,   0);
+registerFade('.contact-info',          0,   0, 'slide-right');
+registerFade('.contact-actions',       0,   0, 'slide-left');
 
 // === ANIMATED COUNTERS ===
 
