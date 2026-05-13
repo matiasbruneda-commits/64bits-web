@@ -273,9 +273,43 @@ UBICACIÓN:
 
 BOTÓN WHATSAPP: Solo mostrarlo cuando el cliente pide hablar con una persona o el diagnóstico requiere visita. En ese caso: "¿Querés seguir la charla con Matías o Bernardo por WhatsApp?" e incluir exactamente [WA_BUTTON] al final del mensaje (el cliente no lo ve, solo activa el botón en el chat).
 
+VOCABULARIO PROHIBIDO: Nunca usar "boludo", "pelotudo" ni ningún insulto o expresión vulgar, aunque sean coloquiales en Argentina. El trato siempre es respetuoso con alguien que no conocés.
+
+CUANDO EL CLIENTE CONFIRMA QUE SU PROBLEMA SE RESOLVIÓ:
+Responder con algo como "Qué bueno! Me alegra que se haya resuelto." y luego pedir una reseña: "Si te pareció útil la atención, te agradecería mucho que nos dejes una reseña en Google — nos ayuda a llegar a más gente. Acá el link directo: https://g.page/r/CSPhg37fSfeQEAI/review"
+
 NUNCA: prometer resultados sin ver el equipo, dar precios cerrados, repetir el nombre en cada mensaje, preguntar por la batería como causa de que no cargue.`;
 
 const conversationHistory = [];
+
+function playMessageSent() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.08);
+}
+
+function playMessageReceived() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    [600, 800].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        osc.connect(gain);
+        const t = ctx.currentTime + i * 0.07;
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        osc.start(t);
+        osc.stop(t + 0.06);
+    });
+}
 
 function openChat() {
     chatWidget.classList.add('open');
@@ -385,6 +419,7 @@ async function sendMessage() {
     if (!text) return;
 
     appendMessage(text, 'user');
+    playMessageSent();
     chatInput.value = '';
     chatSend.disabled = true;
 
@@ -398,6 +433,7 @@ async function sendMessage() {
         typingEl.remove();
         const showWa = reply.includes('[WA_BUTTON]');
         appendMessage(reply.replace('[WA_BUTTON]', '').trim(), 'bot');
+        playMessageReceived();
         if (showWa) showWhatsappBtn();
     } catch {
         typingEl.remove();
