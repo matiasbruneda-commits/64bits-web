@@ -188,6 +188,37 @@ const chatSend     = document.getElementById('chatSend');
 const chatMessages = document.getElementById('chatMessages');
 const matiaHeroBtn = document.getElementById('matiaHeroBtn');
 
+// URL del Cloudflare Worker — reemplazar después de deployar
+const MATIA_WORKER = 'https://matia-64bits.matiasbruneda.workers.dev';
+
+const MATIA_SYSTEM = `Sos MAT-IA, el asistente técnico de 64 Bits Belgrano, servicio técnico especializado en reparación de iPhone y MacBook en Belgrano, CABA.
+
+Tu rol es diagnosticar el problema del cliente haciendo preguntas específicas y orientarlo hacia la solución correcta.
+
+Reglas de conversación:
+- Hablá en español rioplatense (vos, che, boludo en contexto amigable).
+- Sé conciso: máximo 3 oraciones por respuesta.
+- Hacé UNA pregunta a la vez para identificar el problema (equipo, modelo, síntoma).
+- Si el cliente ya describió bien el problema, ofrecé coordinar por WhatsApp.
+- No inventes precios ni garantías específicas.
+
+Servicios que ofrecemos:
+- Reparación de placa lógica iPhone (microsoldadura)
+- Reparación de placa lógica MacBook (microsoldadura)
+- Diagnóstico (sin cargo si no hay reparación viable)
+- Cambio de pantalla iPhone
+- Cambio de batería iPhone y MacBook
+- Reparación de conector de carga
+
+Datos del local:
+- Dirección: Ciudad de la Paz 2347, local 63, Belgrano, CABA
+- Horario: lunes a viernes, 10 a 18hs
+- WhatsApp: +54 11 5340-3805
+
+Cuando ya tenés suficiente info del problema (equipo + síntoma principal), invitá al cliente a usar el botón "Enviar resumen por WhatsApp" que aparece en el chat para que el técnico esté preparado cuando llegue.`;
+
+const conversationHistory = [];
+
 function openChat() {
     chatWidget.classList.add('open');
     chatTrigger.classList.add('hidden');
@@ -241,40 +272,53 @@ function showTyping() {
     return msg;
 }
 
-function getBotResponse(message) {
-    const m = message.toLowerCase();
-
-    if (m.match(/^(hola|buenas|buenos|hi|hey)/))
-        return '¡Hola! Contame qué problema tiene tu equipo y te oriento.';
-    if (m.includes('iphone'))
-        return '¿El iPhone no enciende, no carga, o tiene otro síntoma? Eso me ayuda a orientarte mejor.';
-    if (m.includes('macbook') || m.includes('mac book'))
-        return '¿Es Air o Pro? ¿El síntoma es que no enciende, sin imagen en pantalla, o problema de carga?';
-    if (m.includes('mac') && (m.includes('no enciende') || m.includes('no prende')))
-        return 'Ese síntoma en Mac generalmente es falla de placa o controlador de carga. Lo resolvemos con microsoldadura. ¿Querés coordinar por WhatsApp?';
-    if (m.includes('no enciende') || m.includes('no prende') || m.includes('no arranca') || m.includes('apagado'))
-        return 'Ese síntoma puede ser placa, batería o conector de carga. La mayoría se resuelve con microsoldadura. ¿Querés coordinarlo por WhatsApp?';
-    if (m.includes('pantalla') || m.includes('display') || m.includes('imagen') || m.includes('backlight'))
-        return 'Los problemas de imagen pueden ser la pantalla en sí o el controlador en placa. Necesitamos verlo presencialmente para confirmarte. ¿Lo traés al local?';
-    if (m.includes('agua') || m.includes('mojado') || m.includes('líquido') || m.includes('liquido') || m.includes('cayó') || m.includes('cayo'))
-        return '¡Importante! Si se mojó, apagalo ya si aún no lo hiciste y NO lo cargues. Traelo cuanto antes: los daños por líquido se recuperan mucho mejor si se actúa rápido.';
-    if (m.includes('carga') || m.includes('batería') || m.includes('bateria') || m.includes('puerto'))
-        return 'Los problemas de carga pueden ser el conector, el circuito de carga en placa, o la batería. Primero hacemos diagnóstico para confirmarte cuál es. ¿Lo traés al local?';
-    if (m.includes('face id') || m.includes('faceid'))
-        return 'El Face ID es uno de los trabajos más delicados. Dependiendo qué módulo falló, puede tener solución. Necesitamos evaluarlo. ¿Lo traés al local?';
-    if (m.includes('precio') || m.includes('costo') || m.includes('cuánto') || m.includes('cuanto') || m.includes('presupuesto'))
-        return 'Los precios varían según la falla. Primero hacemos el diagnóstico (sin cargo si no hay reparación viable) y después te pasamos el presupuesto. ¿Qué equipo tenés?';
-    if (m.includes('whatsapp') || m.includes('contacto') || m.includes('teléfono') || m.includes('telefono') || m.includes('llamar'))
-        return 'Podés escribirnos al +54 11 5340-3805 o +54 11 6354-0404. Atendemos de lunes a viernes de 10 a 18hs. ¡Te esperamos!';
-    if (m.includes('garantía') || m.includes('garantia'))
-        return 'Trabajamos con garantía sobre la reparación. Los detalles te los pasamos cuando te presupuestamos según el tipo de trabajo.';
-    if (m.includes('tiempo') || m.includes('demora') || m.includes('cuándo') || m.includes('cuando'))
-        return 'Los tiempos varían según la complejidad de la falla. En general entre 2 y 7 días hábiles. Te lo confirmamos al hacer el diagnóstico.';
-
-    return 'Entendido. Para darte un diagnóstico preciso necesitamos ver el equipo en el local. ¿Querés coordinar una visita por WhatsApp?';
+function buildWhatsappSummary() {
+    const lines = [];
+    chatMessages.querySelectorAll('.chat-msg').forEach(msg => {
+        const bubble = msg.querySelector('.chat-bubble');
+        if (!bubble || bubble.classList.contains('typing-dots')) return;
+        const role = msg.classList.contains('bot') ? 'MAT-IA' : 'Cliente';
+        const txt = bubble.textContent.trim();
+        if (txt) lines.push(`${role}: ${txt}`);
+    });
+    return `Hola! Te paso el resumen de mi consulta con MAT-IA 64 Bits:\n\n${lines.join('\n')}`;
 }
 
-function sendMessage() {
+function showWhatsappBtn() {
+    if (document.getElementById('chatWaBtn')) return;
+    const footer = chatWidget.querySelector('.chat-footer');
+    if (!footer) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'chatWaBtn';
+    btn.className = 'chat-wa-btn';
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Enviar resumen por WhatsApp`;
+    btn.addEventListener('click', () => {
+        const url = `https://wa.me/5491153403805?text=${encodeURIComponent(buildWhatsappSummary())}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+    });
+
+    footer.insertBefore(btn, footer.firstChild);
+}
+
+async function callMatIA(userText) {
+    conversationHistory.push({ role: 'user', content: userText });
+
+    const res = await fetch(MATIA_WORKER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system: MATIA_SYSTEM, messages: conversationHistory }),
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'No pude procesar la respuesta. Intentá de nuevo.';
+    conversationHistory.push({ role: 'assistant', content: reply });
+    return reply;
+}
+
+async function sendMessage() {
     const text = chatInput.value.trim();
     if (!text) return;
 
@@ -284,12 +328,18 @@ function sendMessage() {
 
     const typingEl = showTyping();
 
-    setTimeout(() => {
+    try {
+        const reply = await callMatIA(text);
         typingEl.remove();
-        appendMessage(getBotResponse(text), 'bot');
+        appendMessage(reply, 'bot');
+        if (conversationHistory.length >= 4) showWhatsappBtn();
+    } catch {
+        typingEl.remove();
+        appendMessage('No pude conectarme. Escribinos directo al <a href="https://wa.me/5491153403805" target="_blank" rel="noopener noreferrer">WhatsApp +54 11 5340-3805</a>.', 'bot');
+    } finally {
         chatSend.disabled = false;
         chatInput.focus();
-    }, 900 + Math.random() * 400);
+    }
 }
 
 chatSend.addEventListener('click', sendMessage);

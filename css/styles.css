@@ -901,6 +901,25 @@ a.contact-value:hover { color: var(--accent); }
 .chat-send:hover:not(:disabled) { background: var(--accent-hover); }
 .chat-send:disabled { opacity: 0.35; cursor: default; }
 
+.chat-wa-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    padding: 7px 12px;
+    margin-bottom: 8px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    justify-content: center;
+}
+.chat-wa-btn:hover { background: #1ebe5d; transform: translateY(-1px); }
+
 /* Floating trigger */
 .chat-trigger {
     position: fixed;
