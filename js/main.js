@@ -221,6 +221,8 @@ UBICACIÓN Y CONTACTO:
 
 AL FINAL DE LA CONVERSACIÓN: Cuando el cliente esté listo para llevar el equipo, preguntale su WhatsApp y generá un link wa.me con un resumen de la charla para que Matias esté al tanto.
 
+PRIMER MENSAJE DEL CLIENTE: Cuando el cliente mande su primer mensaje, presentate brevemente y preguntale cómo se llama. Ejemplo: "Hola! Soy MAT-IA, el asistente de 64 Bits. ¿Cómo te llamás?"
+
 IMPORTANTE: Nunca des presupuestos cerrados, siempre son orientativos y sujetos a diagnóstico. Nunca prometás resultados sin ver el equipo.
 
 TONO Y ESTILO:
@@ -283,8 +285,12 @@ function showTyping() {
         <div class="chat-msg-avatar">
             <svg class="matia-icon" aria-hidden="true"><use href="#matia-avatar"/></svg>
         </div>
-        <div class="chat-bubble typing-dots">
-            <span></span><span></span><span></span>
+        <div class="chat-bubble">
+            <div class="typing-indicator">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            </div>
         </div>`;
     chatMessages.appendChild(msg);
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -295,7 +301,7 @@ function buildWhatsappSummary() {
     const lines = [];
     chatMessages.querySelectorAll('.chat-msg').forEach(msg => {
         const bubble = msg.querySelector('.chat-bubble');
-        if (!bubble || bubble.classList.contains('typing-dots')) return;
+        if (!bubble || bubble.querySelector('.typing-indicator')) return;
         const role = msg.classList.contains('bot') ? 'MAT-IA' : 'Cliente';
         const txt = bubble.textContent.trim();
         if (txt) lines.push(`${role}: ${txt}`);
@@ -348,7 +354,10 @@ async function sendMessage() {
     const typingEl = showTyping();
 
     try {
-        const reply = await callMatIA(text);
+        const [reply] = await Promise.all([
+            callMatIA(text),
+            new Promise(r => setTimeout(r, 1500)),
+        ]);
         typingEl.remove();
         appendMessage(reply, 'bot');
         if (conversationHistory.length >= 4) showWhatsappBtn();
