@@ -18,6 +18,7 @@
     --radius-sm:    8px;
     --font:         'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     --nav-h:        52px;
+    --yellow:       #F5C518;
 }
 
 html { scroll-behavior: smooth; }
