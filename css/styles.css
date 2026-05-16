@@ -157,8 +157,10 @@ body {
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); }
 
-.btn-yellow { background: transparent; color: var(--yellow); font-weight: 700; border: 1px solid var(--yellow); }
-.btn-yellow:hover { background: var(--yellow); color: #000; }
+.btn-yellow { background: var(--yellow); color: #000; font-weight: 700; border: 1px solid var(--yellow); width: 100%; justify-content: center; }
+.btn-yellow:hover { background: transparent; color: var(--yellow); }
+.btn-ghost { background: var(--accent); color: var(--yellow) !important; border: none; }
+.btn-ghost:hover { background: var(--yellow); color: var(--accent) !important; border: none; }
 
 .btn-ghost {
     background: transparent;
