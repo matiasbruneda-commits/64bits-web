@@ -154,8 +154,8 @@ body {
     white-space: nowrap;
 }
 
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary { background: var(--accent); color: var(--yellow); }
+.btn-primary:hover { background: var(--yellow); color: var(--accent); }
 
 .btn-yellow { background: var(--yellow); color: #000; font-weight: 700; border: 2px solid var(--yellow); width: 100%; justify-content: center; }
 .btn-yellow:hover { background: transparent; color: var(--yellow); }
@@ -167,12 +167,7 @@ body {
 .hero-actions-row { display: flex; gap: 12px; width: 100%; }
 .hero-actions-row .btn { flex: 1; justify-content: center; }
 
-.btn-ghost {
-    background: transparent;
-    color: var(--accent);
-    border: 1px solid rgba(139, 26, 26, 0.4);
-}
-.btn-ghost:hover { background: rgba(139, 26, 26, 0.08); border-color: var(--accent); }
+
 
 .btn-large { padding: 14px 28px; font-size: 16px; }
 
