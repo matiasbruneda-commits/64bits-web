@@ -423,6 +423,17 @@
       gap: 0.75rem;
     }
 
+    @media (max-width: 480px) {
+      .success-card {
+        padding: 1.5rem 1rem;
+        margin-bottom: 2rem;
+      }
+      .btn-wa, .btn-matia {
+        font-size: 0.9rem;
+        padding: 1rem;
+      }
+    }
+
     .btn-wa {
       background: #25D366;
       color: #fff;
@@ -646,9 +657,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Abrir WhatsApp
         </a>
-        <a class="btn-matia" href="/#chat">
-          🤖 Charlar con MAT-IA para más detalles
-        </a>
+        <!-- btn-matia oculto temporalmente - próxima sesión -->
       </div>
     </div>
 
@@ -684,57 +693,72 @@ const MODELOS = {
     'Apple Watch Ultra','Apple Watch Ultra 2',
   ],
   macbook: [
-    'MacBook Air A1465 (2012)','MacBook Air A1466 (2012)','MacBook Air A1465 (2013)',
-    'MacBook Air A1466 (2013)','MacBook Air A1465 (2014)','MacBook Air A1466 (2014)',
-    'MacBook Air A1465 (2015)','MacBook Air A1466 (2015)','MacBook Air A1466 (2017)',
-    'MacBook Air A1932 (2018)','MacBook Air A1932 (2019)','MacBook Air A2179 (2020)',
-    'MacBook Air M1 A2337 (2020)','MacBook Air M2 A2681 (2022)','MacBook Air M3 A3113 (2024)',
-    'MacBook Pro A1278 (2012)','MacBook Pro A1286 (2012)','MacBook Pro A1398 (2012 Retina)',
-    'MacBook Pro A1425 (2012 Retina 13)','MacBook Pro A1502 (2013)','MacBook Pro A1398 (2013)',
-    'MacBook Pro A1502 (2014)','MacBook Pro A1398 (2014)','MacBook Pro A1502 (2015)',
-    'MacBook Pro A1398 (2015)','MacBook Pro A1706 (2016 13)','MacBook Pro A1707 (2016 15)',
-    'MacBook Pro A1708 (2016 13 sin Touch Bar)','MacBook Pro A1706 (2017)','MacBook Pro A1707 (2017)',
-    'MacBook Pro A1989 (2018 13)','MacBook Pro A1990 (2018 15)','MacBook Pro A2159 (2019 13)',
-    'MacBook Pro A1990 (2019 15)','MacBook Pro A2141 (2019 16)','MacBook Pro A2251 (2020 13)',
-    'MacBook Pro A2289 (2020 13)','MacBook Pro M1 A2338 (2020)','MacBook Pro M1 Pro A2442 (2021 14)',
-    'MacBook Pro M1 Pro A2485 (2021 16)','MacBook Pro M1 Max A2485 (2021 16)',
-    'MacBook Pro M2 A2338 (2022)','MacBook Pro M2 Pro A2779 (2023 14)',
-    'MacBook Pro M2 Max A2780 (2023 16)','MacBook Pro M3 A2918 (2023 14)',
-    'MacBook Pro M3 Pro A2992 (2023 14)','MacBook Pro M3 Max A2991 (2023 16)',
-    'MacBook Pro M4 (2024)','MacBook Pro M4 Pro (2024)','MacBook Pro M4 Max (2024)',
-    'MacBook A1534 (2015)','MacBook A1534 (2016)','MacBook A1534 (2017)','MacBook A1534 (2018 12)',
+    'MacBook Air 11" (2012) — A1465','MacBook Air 13" (2012) — A1466','MacBook Air 11" (2013) — A1465',
+    'MacBook Air 13" (2013) — A1466','MacBook Air 11" (2014) — A1465','MacBook Air 13" (2014) — A1466',
+    'MacBook Air 11" (2015) — A1465','MacBook Air 13" (2015) — A1466','MacBook Air 13" (2017) — A1466',
+    'MacBook Air (2018) — A1932','MacBook Air (2019) — A1932','MacBook Air (2020) — A2179',
+    'MacBook Air M1 (2020) — A2337','MacBook Air M2 (2022) — A2681','MacBook Air M3 (2024) — A3113','MacBook Air M4 13" (2025) — A3240','MacBook Air M4 15" (2025) — A3509',
+    'MacBook Pro 13" (2012) — A1278','MacBook Pro 15" (2012) — A1286','MacBook Pro 15" Retina (2012) — A1398',
+    'MacBook Pro 13" Retina (2012) — A1425','MacBook Pro 13" (2013) — A1502','MacBook Pro 15" (2013) — A1398',
+    'MacBook Pro 13" (2014) — A1502','MacBook Pro 15" (2014) — A1398','MacBook Pro 13" (2015) — A1502',
+    'MacBook Pro 15" (2015) — A1398','MacBook Pro 13" (2016) — A1706','MacBook Pro 15" (2016) — A1707',
+    'MacBook Pro 13" sin Touch Bar (2016) — A1708','MacBook Pro 13" (2017) — A1706','MacBook Pro 15" (2017) — A1707',
+    'MacBook Pro 13" (2018) — A1989','MacBook Pro 15" (2018) — A1990','MacBook Pro 13" (2019) — A2159',
+    'MacBook Pro 15" (2019) — A1990','MacBook Pro 16" (2019) — A2141','MacBook Pro 13" (2020) — A2251',
+    'MacBook Pro 13" (2020) — A2289','MacBook Pro M1 13" (2020) — A2338','MacBook Pro M1 Pro 14" (2021) — A2442',
+    'MacBook Pro M1 Pro 16" (2021) — A2485','MacBook Pro M1 Max 16" (2021) — A2485',
+    'MacBook Pro M2 13" (2022) — A2338','MacBook Pro M2 Pro 14" (2023) — A2779',
+    'MacBook Pro M2 Max 16" (2023) — A2780','MacBook Pro M3 14" (2023) — A2918',
+    'MacBook Pro M3 Pro 14" (2023) — A2992','MacBook Pro M3 Max 16" (2023) — A2991',
+    'MacBook Pro M4 14" (2024) — A3291','MacBook Pro M4 Pro 14" (2024) — A3293','MacBook Pro M4 Max 16" (2024) — A3296',
+    'MacBook 12" (2015) — A1534','MacBook 12" (2016) — A1534','MacBook 12" (2017) — A1534','MacBook 12" (2018) — A1534',
   ],
   ipad: [
-    'iPad 2','iPad 3ra generación','iPad 4ta generación',
-    'iPad Air (1ra generación)','iPad Air 2','iPad Air 3ra generación','iPad Air 4ta generación',
-    'iPad Air 5ta generación (M1)','iPad Air M2 11" (2024)','iPad Air M2 13" (2024)',
-    'iPad Mini 1ra generación','iPad Mini 2','iPad Mini 3','iPad Mini 4','iPad Mini 5ta generación',
-    'iPad Mini 6ta generación','iPad Mini 7ma generación',
-    'iPad 5ta generación','iPad 6ta generación','iPad 7ma generación','iPad 8va generación',
-    'iPad 9na generación','iPad 10ma generación',
-    'iPad Pro 9.7" (2016)','iPad Pro 12.9" (2015)','iPad Pro 10.5" (2017)','iPad Pro 12.9" (2017)',
-    'iPad Pro 11" (2018)','iPad Pro 12.9" (2018)','iPad Pro 11" (2020)','iPad Pro 12.9" (2020)',
-    'iPad Pro 11" M1 (2021)','iPad Pro 12.9" M1 (2021)',
-    'iPad Pro 11" M2 (2022)','iPad Pro 12.9" M2 (2022)',
-    'iPad Pro 11" M4 (2024)','iPad Pro 13" M4 (2024)',
+    // iPad estándar
+    'iPad 2 — A1395','iPad 3ra generación — A1416','iPad 4ta generación — A1458',
+    'iPad 5ta generación — A1822','iPad 6ta generación — A1893','iPad 7ma generación — A2197',
+    'iPad 8va generación — A2270','iPad 9na generación — A2602','iPad 10ma generación — A2696',
+    // iPad Air
+    'iPad Air (1ra generación) — A1474','iPad Air 2 — A1566',
+    'iPad Air 3ra generación — A2152','iPad Air 4ta generación — A2316',
+    'iPad Air 5ta generación M1 — A2588','iPad Air M2 11" (2024) — A2902','iPad Air M2 13" (2024) — A2926',
+    // iPad Mini
+    'iPad Mini 1ra generación — A1432','iPad Mini 2 — A1489','iPad Mini 3 — A1599',
+    'iPad Mini 4 — A1538','iPad Mini 5ta generación — A2133',
+    'iPad Mini 6ta generación — A2567','iPad Mini 7ma generación — A3311',
+    // iPad Pro
+    'iPad Pro 9.7" (2016) — A1673','iPad Pro 12.9" (2015) — A1584',
+    'iPad Pro 10.5" (2017) — A1701','iPad Pro 12.9" (2017) — A1670',
+    'iPad Pro 11" (2018) — A1980','iPad Pro 12.9" (2018) — A1876',
+    'iPad Pro 11" (2020) — A2228','iPad Pro 12.9" (2020) — A2229',
+    'iPad Pro 11" M1 (2021) — A2301','iPad Pro 12.9" M1 (2021) — A2378',
+    'iPad Pro 11" M2 (2022) — A2759','iPad Pro 12.9" M2 (2022) — A2764',
+    'iPad Pro 11" M4 WiFi (2024) — A2836','iPad Pro 13" M4 WiFi (2024) — A2925','iPad Pro 13" M4 WiFi+Cellular (2024) — A2926',
   ],
   imac: [
-    'iMac 21.5" (2010)','iMac 27" (2010)','iMac 21.5" (2011)','iMac 27" (2011)',
-    'iMac 21.5" (2012)','iMac 27" (2012)','iMac 21.5" (2013)','iMac 27" (2013)',
-    'iMac 21.5" (2014)','iMac 27" (2014)','iMac 21.5" (2015)','iMac 27" (2015)',
-    'iMac 21.5" (2017)','iMac 27" (2017)','iMac Pro 27" (2017)',
-    'iMac 21.5" (2019)','iMac 27" (2019)','iMac 27" (2020)',
-    'iMac M1 24" (2021)','iMac M3 24" (2023)',
+    // iMac 21.5"
+    'iMac 21.5" (2009) — A1311','iMac 21.5" (2010) — A1311','iMac 21.5" (2011) — A1311',
+    'iMac 21.5" (2012) — A1418','iMac 21.5" (2013) — A1418','iMac 21.5" (2014) — A1418',
+    'iMac 21.5" (2015) — A1418','iMac 21.5" (2017) — A1418','iMac 21.5" (2019) — A2116',
+    // iMac 27"
+    'iMac 27" (2009) — A1312','iMac 27" (2010) — A1312','iMac 27" (2011) — A1312',
+    'iMac 27" (2012) — A1419','iMac 27" (2013) — A1419','iMac 27" (2014) — A1419',
+    'iMac 27" (2015) — A1419','iMac 27" (2017) — A1419','iMac 27" (2019) — A2115',
+    'iMac 27" (2020) — A2115',
+    // iMac Pro
+    'iMac Pro 27" (2017) — A1862',
+    // iMac 24" (M1/M3/M4)
+    'iMac 24" M1 (2021) — A2438','iMac 24" M3 (2023) — A2874','iMac 24" M4 (2024) — A3226',
   ],
   macmini: [
-    'Mac Mini (2010)','Mac Mini (2011)','Mac Mini (2012)','Mac Mini (2014)',
-    'Mac Mini (2018)','Mac Mini (2020)','Mac Mini M1 (2020)',
-    'Mac Mini M2 (2023)','Mac Mini M2 Pro (2023)',
-    'Mac Mini M4 (2024)','Mac Mini M4 Pro (2024)',
+    'Mac Mini (2010) — A1347','Mac Mini (2011) — A1347','Mac Mini (2012) — A1347','Mac Mini (2014) — A1347',
+    'Mac Mini (2018) — A1993','Mac Mini (2020) — A1993','Mac Mini M1 (2020) — A2348',
+    'Mac Mini M2 (2023) — A2686','Mac Mini M2 Pro (2023) — A2686',
+    'Mac Mini M4 (2024) — A3084','Mac Mini M4 Pro (2024) — A3085',
   ],
   ipod: [
-    'iPod Touch 5ta generación','iPod Touch 6ta generación','iPod Touch 7ma generación',
-    'iPod Nano 7ma generación','iPod Classic',
+    'iPod Touch 5ta generación — A1421','iPod Touch 6ta generación — A1574','iPod Touch 7ma generación — A2178',
+    'iPod Nano 7ma generación — A1446','iPod Classic — A1238',
   ],
   samsung: [
     // Serie S
@@ -1251,31 +1275,55 @@ function validate() {
   return ok;
 }
 
+const WA_PRINCIPAL = '5491153403805';
+const WA_ALTERNATIVO = '5491163540404';
+
+function isHorarioComercial() {
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const ar = new Date(utc + (-3 * 3600000));
+  const dia = ar.getDay(); // 0=domingo, 1=lunes...5=viernes, 6=sábado
+  const hora = ar.getHours();
+  const esLunesAViernes = dia >= 1 && dia <= 5;
+  const esDentroDe18 = hora < 18;
+  return esLunesAViernes && esDentroDe18;
+}
+
 function buildWAMessage() {
   const marca = state.marca === 'otro' ? state.marcaOtro || 'Otra' : state.marca.charAt(0).toUpperCase() + state.marca.slice(1);
   const tipo = state.tipoApple ? state.tipoApple.charAt(0).toUpperCase() + state.tipoApple.slice(1) : '';
   const modelo = state.modelo || 'No especificado';
   const falla = state.fallaLibre || state.falla || 'No especificada';
-  const adicional = state.adicional ? `\nInfo adicional: ${state.adicional}` : '';
+  const adicional = state.adicional ? '\nInfo adicional: ' + state.adicional : '';
+  const fueraHorario = !isHorarioComercial() ? '\n\n⏰ _Mensaje enviado fuera del horario comercial._' : '';
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const tel = document.getElementById('inp-tel').value.trim();
 
-  return `Hola! Quiero cotizar una reparación:
-
-📱 *Marca:* ${marca}${tipo ? `\n📦 *Tipo:* ${tipo}` : ''}
-🔧 *Modelo:* ${modelo}
-⚠️ *Problema:* ${falla}${adicional}
-
-👤 *Nombre:* ${document.getElementById('inp-nombre').value.trim()}
-✉️ *E-mail:* ${document.getElementById('inp-email').value.trim()}
-📞 *Teléfono:* ${document.getElementById('inp-tel').value.trim()}`;
+  return 'Hola! Quiero cotizar una reparación:\n\n' +
+    '📱 *Marca:* ' + marca + (tipo ? '\n📦 *Tipo:* ' + tipo : '') + '\n' +
+    '🔧 *Modelo:* ' + modelo + '\n' +
+    '⚠️ *Problema:* ' + falla + adicional + '\n\n' +
+    '👤 *Nombre:* ' + nombre + '\n' +
+    '✉️ *E-mail:* ' + email + '\n' +
+    '📞 *Teléfono:* ' + tel + fueraHorario;
 }
 
 function submitForm() {
   if (!validate()) return;
 
+  const horarioComercial = isHorarioComercial();
+  const numero = horarioComercial ? WA_PRINCIPAL : WA_ALTERNATIVO;
   const msg = buildWAMessage();
-  const url = `https://wa.me/5491153403805?text=${encodeURIComponent(msg)}`;
+  const url = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(msg);
 
   document.getElementById('btn-wa-final').href = url;
+
+  // Cambiar mensaje si es fuera de horario
+  if (!horarioComercial) {
+    const sub = document.querySelector('.success-sub');
+    if (sub) sub.innerHTML = 'Tu consulta fue enviada. Estamos fuera del horario comercial, pero te responderemos a la brevedad. 🙌';
+  }
 
   // Ocultar form, mostrar success
   document.getElementById('formSteps').style.display = 'none';
@@ -1283,8 +1331,15 @@ function submitForm() {
   document.getElementById('success-card').classList.add('visible');
   document.getElementById('progressFill').style.width = '100%';
 
+  // Scroll al top para ver el success card en mobile
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
   // Abrir WA automáticamente
-  window.open(url, '_blank', 'noopener,noreferrer');
+  try {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } catch(e) {
+    // Si el navegador bloquea el popup, el cliente puede usar el botón
+  }
 }
 
 // Cerrar autocomplete al click fuera
