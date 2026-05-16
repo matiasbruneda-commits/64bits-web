@@ -213,13 +213,17 @@ body {
     gap: 12px;
     align-items: stretch;
     width: 100%;
-    max-width: 480px;
+    max-width: 560px;
 }
 
 .hero-actions-row {
     display: flex;
     gap: 12px;
     width: 100%;
+}
+
+.hero-actions-row .btn {
+    flex: 1;
 }
 
 /* === MAT-IA BUTTON (hero) === */
@@ -1072,8 +1076,8 @@ a.contact-value:hover { color: var(--accent); }
 
     .hero-title { font-size: 38px; }
     .hero-actions { align-items: stretch; }
-    .matia-btn { justify-content: center; }
     .hero-actions-row { flex-direction: column; }
+    .hero-actions-row .btn { width: 100%; justify-content: center; }
     .hero-actions .btn { justify-content: center; }
     .whatsapp-btn, .social-btn { font-size: 14px; padding: 15px 16px; }
     .service-card { padding: 28px 24px; }
