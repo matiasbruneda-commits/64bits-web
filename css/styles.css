@@ -219,14 +219,16 @@ body {
 .hero-actions {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    align-items: flex-start;
+    gap: 12px;
+    align-items: stretch;
+    width: 100%;
+    max-width: 480px;
 }
 
 .hero-actions-row {
     display: flex;
     gap: 12px;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 /* === MAT-IA BUTTON (hero) === */
