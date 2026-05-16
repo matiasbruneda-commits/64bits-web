@@ -157,8 +157,8 @@ body {
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); }
 
-.btn-yellow { background: var(--yellow); color: #000; font-weight: 700; }
-.btn-yellow:hover { background: #ffd700; }
+.btn-yellow { background: transparent; color: var(--yellow); font-weight: 700; border: 1px solid var(--yellow); }
+.btn-yellow:hover { background: var(--yellow); color: #000; }
 
 .btn-ghost {
     background: transparent;
