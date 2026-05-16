@@ -1247,3 +1247,6 @@ a.contact-value:hover { color: var(--accent); }
 
 /* === NO FADE === */
 .no-fade { opacity: 1 !important; transform: none !important; }
+.hero-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 480px; }
+.hero-actions-row { display: flex; gap: 12px; width: 100%; }
+.hero-actions-row .btn { flex: 1; justify-content: center; }
