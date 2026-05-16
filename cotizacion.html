@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizá tu reparación — 64 Bits Belgrano</title>
+  <meta name="description" content="Completá el formulario y te contactamos en minutos con el presupuesto de tu reparación de iPhone, MacBook y más.">
+  <link rel="canonical" href="https://64bits.com.ar/cotizacion">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-alt: #111;
+      --bg-elevated: #1a1a1a;
+      --accent: #8B1A1A;
+      --accent-hover: #a82020;
+      --yellow: #F5C518;
+      --yellow-dim: rgba(245,197,24,0.12);
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(245,197,24,0.3);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: 'Inter', system-ui, sans-serif;
+      --nav-h: 64px;
+      --transition: 0.2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color var(--transition);
+    }
+
+    .nav-back:hover { color: var(--yellow); }
+
+    /* HERO */
+    .hero {
+      padding-top: calc(var(--nav-h) + 4rem);
+      padding-bottom: 2rem;
+      text-align: center;
+      padding-inline: 1.5rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      color: var(--yellow);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-title span { color: var(--yellow); }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* FORM CONTAINER */
+    .form-container {
+      max-width: 680px;
+      margin: 3rem auto 6rem;
+      padding: 0 1.5rem;
+    }
+
+    /* STEP */
+    .step-block {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1rem;
+      transition: border-color var(--transition);
+      display: none;
+    }
+
+    .step-block.visible {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    .step-block.first { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-block:focus-within {
+      border-color: var(--border-hover);
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 0.75rem;
+    }
+
+    /* SELECT */
+    .custom-select {
+      position: relative;
+    }
+
+    .custom-select select {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      padding: 0.85rem 2.5rem 0.85rem 1rem;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color var(--transition);
+      outline: none;
+    }
+
+    .custom-select select:focus {
+      border-color: var(--yellow);
+    }
+
+    .custom-select::after {
+      content: '';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* INPUT */
+    .field-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .field-input:focus {
+      border-color: var(--yellow);
+    }
+
+    .field-input::placeholder { color: var(--text-muted); }
+
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* AUTOCOMPLETE */
+    .autocomplete-wrap {
+      position: relative;
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0; right: 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-sm);
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 50;
+      display: none;
+    }
+
+    .autocomplete-list.open { display: block; }
+
+    .autocomplete-item {
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background var(--transition);
+      color: var(--text);
+    }
+
+    .autocomplete-item:hover,
+    .autocomplete-item.active {
+      background: var(--yellow-dim);
+      color: var(--yellow);
+    }
+
+    .autocomplete-item mark {
+      background: none;
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    /* FALLAS */
+    .fallas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 480px) {
+      .fallas-grid { grid-template-columns: 1fr; }
+    }
+
+    .falla-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 0.9rem;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      font-size: 0.875rem;
+      color: var(--text);
+      user-select: none;
+    }
+
+    .falla-option input[type="radio"] { display: none; }
+
+    .falla-option:hover {
+      border-color: var(--border-hover);
+      background: var(--yellow-dim);
+    }
+
+    .falla-option.selected {
+      border-color: var(--yellow);
+      background: var(--yellow-dim);
+      color: var(--yellow);
+    }
+
+    .falla-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 2px solid var(--text-muted);
+      flex-shrink: 0;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .falla-option.selected .falla-dot {
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    /* CONSENTIMIENTO */
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .consent-label input[type="checkbox"] { display: none; }
+
+    .consent-box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .consent-label input:checked + .consent-box {
+      background: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    .consent-label input:checked + .consent-box::after {
+      content: '✓';
+      color: #000;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* SUBMIT */
+    .submit-btn {
+      width: 100%;
+      background: var(--yellow);
+      color: #000;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background var(--transition), transform var(--transition);
+      letter-spacing: 0.01em;
+    }
+
+    .submit-btn:hover { background: #ffd700; transform: translateY(-1px); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* SUCCESS */
+    .success-card {
+      display: none;
+      background: var(--bg-alt);
+      border: 1px solid rgba(245,197,24,0.3);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .success-card.visible { display: block; animation: slideDown 0.4s ease; }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--yellow-dim);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-size: 1.75rem;
+    }
+
+    .success-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .success-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn-wa {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: background var(--transition);
+    }
+
+    .btn-wa:hover { background: #1ebe5d; }
+
+    .btn-matia {
+      background: var(--bg-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: border-color var(--transition), color var(--transition);
+    }
+
+    .btn-matia:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--yellow);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 14%;
+    }
+
+    /* SCROLLBAR */
+    .autocomplete-list::-webkit-scrollbar { width: 4px; }
+    .autocomplete-list::-webkit-scrollbar-track { background: transparent; }
+    .autocomplete-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .page-footer a { color: var(--yellow); text-decoration: none; }
+
+    /* ERROR */
+    .field-error {
+      font-size: 0.78rem;
+      color: #e55;
+      margin-top: 0.4rem;
+      display: none;
+    }
+    .field-error.show { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="logo.svg" alt="64 Bits Belgrano">
+  </a>
+  <a href="/" class="nav-back">
+    ← Volver al inicio
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-eyebrow">Servicio técnico especializado</span>
+  <h1 class="hero-title">Cotizá tu reparación<br><span>ya mismo</span></h1>
+  <p class="hero-subtitle">Completá el formulario y te contactamos en minutos con el presupuesto.</p>
+</div>
+
+<!-- FORM -->
+<div class="form-container">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div id="formSteps">
+
+    <!-- PASO 1: MARCA -->
+    <div class="step-block first" id="step-marca">
+      <label class="field-label">¿Qué marca es tu equipo?</label>
+      <div class="custom-select">
+        <select id="sel-marca" onchange="onMarcaChange()">
+          <option value="">Seleccioná una marca</option>
+          <option value="apple">Apple</option>
+          <option value="samsung">Samsung</option>
+          <option value="motorola">Motorola</option>
+          <option value="dji">DJI</option>
+          <option value="xiaomi">Xiaomi</option>
+          <option value="otro">Otra marca</option>
+        </select>
+      </div>
+      <div id="marca-otro-wrap" style="margin-top:0.75rem; display:none;">
+        <input class="field-input" type="text" id="marca-otro-input" placeholder="Escribí la marca de tu equipo">
+      </div>
+    </div>
+
+    <!-- PASO 2A: TIPO APPLE -->
+    <div class="step-block" id="step-tipo-apple">
+      <label class="field-label">¿Qué tipo de equipo Apple es?</label>
+      <div class="custom-select">
+        <select id="sel-tipo-apple" onchange="onTipoAppleChange()">
+          <option value="">Seleccioná el tipo</option>
+          <option value="iphone">iPhone</option>
+          <option value="applewatch">Apple Watch</option>
+          <option value="macbook">MacBook</option>
+          <option value="ipad">iPad</option>
+          <option value="imac">iMac</option>
+          <option value="macmini">Mac Mini</option>
+          <option value="ipod">iPod</option>
+          <option value="airpods">AirPods</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PASO 3: MODELO (autocomplete) -->
+    <div class="step-block" id="step-modelo">
+      <label class="field-label" id="modelo-label">Modelo del equipo</label>
+      <div class="autocomplete-wrap">
+        <input class="field-input" type="text" id="modelo-input" placeholder="Escribí para buscar tu modelo..." autocomplete="off">
+        <div class="autocomplete-list" id="autocomplete-list"></div>
+      </div>
+      <p class="field-hint" id="modelo-hint">Podés buscar por nombre, número de modelo o año.</p>
+    </div>
+
+    <!-- PASO 4: FALLA -->
+    <div class="step-block" id="step-falla">
+      <label class="field-label">¿Qué problema tiene tu equipo?</label>
+      <div id="fallas-container"></div>
+      <div id="falla-libre-wrap" style="margin-top:0.75rem; display:none;">
+        <input class="field-input" type="text" id="falla-libre-input" placeholder="Describí el problema">
+      </div>
+    </div>
+
+    <!-- PASO 5: INFO ADICIONAL -->
+    <div class="step-block" id="step-adicional">
+      <label class="field-label">¿Querés agregar algo más? <span style="color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(opcional)</span></label>
+      <textarea class="field-input" id="info-adicional" rows="3" placeholder="Cualquier detalle que consideres útil para el diagnóstico..." style="resize:vertical; min-height:80px;"></textarea>
+    </div>
+
+    <!-- PASO 6: DATOS -->
+    <div class="step-block" id="step-datos">
+      <label class="field-label" style="margin-bottom:1.25rem;">Tus datos de contacto</label>
+
+      <div style="margin-bottom:1rem;">
+        <label class="field-label" style="color:var(--text-muted);">Consentimiento <span style="color:#e55;">*</span></label>
+        <label class="consent-label">
+          <input type="checkbox" id="consent-check" onchange="updateProgress()">
+          <span class="consent-box"></span>
+          <span>Quiero que me envíen una cotización.</span>
+        </label>
+      </div>
+
+      <div style="margin-bottom:0.75rem;">
+        <label class="field-label" style="color:var(--text-muted);">Nombre completo <span style="color:#e55;">*</span></label>
+        <input class="field-input" type="text" id="inp-nombre" placeholder="Tu nombre" oninput="updateProgress()">
+        <div class="field-error" id="err-nombre">Por favor ingresá tu nombre.</div>
+      </div>
+
+      <div style="margin-bottom:0.75rem;">
+        <label class="field-label" style="color:var(--text-muted);">E-mail <span style="color:#e55;">*</span></label>
+        <input class="field-input" type="email" id="inp-email" placeholder="tu@email.com" oninput="updateProgress()">
+        <div class="field-error" id="err-email">Por favor ingresá un e-mail válido.</div>
+      </div>
+
+      <div style="margin-bottom:0.25rem;">
+        <label class="field-label" style="color:var(--text-muted);">Teléfono <span style="color:#e55;">*</span></label>
+        <input class="field-input" type="tel" id="inp-tel" placeholder="+54 11 5340-3805" value="+5411" oninput="updateProgress()">
+        <div class="field-error" id="err-tel">Por favor ingresá tu teléfono.</div>
+        <p class="field-hint">Ejemplo: +541153403805</p>
+      </div>
+    </div>
+
+    <!-- BOTÓN ENVIAR -->
+    <div id="submit-wrap" style="display:none; margin-top:1rem;">
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar mensaje por WhatsApp
+      </button>
+    </div>
+
+  </div><!-- fin formSteps -->
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="success-card">
+      <div class="success-icon">✓</div>
+      <div class="success-title">¡Listo! Te contactamos pronto.</div>
+      <p class="success-sub">Tu consulta fue enviada. En breve Matias o Bernardo te responden con el presupuesto.</p>
+      <div class="success-actions">
+        <a class="btn-wa" id="btn-wa-final" href="#" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Abrir WhatsApp
+        </a>
+        <a class="btn-matia" href="/#chat">
+          🤖 Charlar con MAT-IA para más detalles
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="page-footer">
+  <a href="/">← Volver a 64bits.com.ar</a> &nbsp;·&nbsp; Ciudad de la Paz 2347, local 63, Belgrano · Lun–Vie 10–18hs
+  <br><br>
+  © 2026 64 Bits Belgrano. Todos los derechos reservados.
+</footer>
+
+<script>
+// =============================================
+// DATOS — MODELOS
+// =============================================
+const MODELOS = {
+  iphone: [
+    'iPhone X','iPhone XS','iPhone XS Max','iPhone XR',
+    'iPhone 11','iPhone 11 Pro','iPhone 11 Pro Max',
+    'iPhone SE (2da generación)','iPhone 12','iPhone 12 Mini','iPhone 12 Pro','iPhone 12 Pro Max',
+    'iPhone 13','iPhone 13 Mini','iPhone 13 Pro','iPhone 13 Pro Max',
+    'iPhone SE (3ra generación)','iPhone 14','iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max',
+    'iPhone 15','iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max',
+    'iPhone 16','iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max',
+    'iPhone 17','iPhone 17 Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone 17e',
+  ],
+  applewatch: [
+    'Apple Watch Series 1','Apple Watch Series 2','Apple Watch Series 3',
+    'Apple Watch Series 4','Apple Watch Series 5','Apple Watch Series 6',
+    'Apple Watch Series 7','Apple Watch Series 8','Apple Watch Series 9','Apple Watch Series 10',
+    'Apple Watch SE (1ra generación)','Apple Watch SE (2da generación)',
+    'Apple Watch Ultra','Apple Watch Ultra 2',
+  ],
+  macbook: [
+    'MacBook Air A1465 (2012)','MacBook Air A1466 (2012)','MacBook Air A1465 (2013)',
+    'MacBook Air A1466 (2013)','MacBook Air A1465 (2014)','MacBook Air A1466 (2014)',
+    'MacBook Air A1465 (2015)','MacBook Air A1466 (2015)','MacBook Air A1466 (2017)',
+    'MacBook Air A1932 (2018)','MacBook Air A1932 (2019)','MacBook Air A2179 (2020)',
+    'MacBook Air M1 A2337 (2020)','MacBook Air M2 A2681 (2022)','MacBook Air M3 A3113 (2024)',
+    'MacBook Pro A1278 (2012)','MacBook Pro A1286 (2012)','MacBook Pro A1398 (2012 Retina)',
+    'MacBook Pro A1425 (2012 Retina 13)','MacBook Pro A1502 (2013)','MacBook Pro A1398 (2013)',
+    'MacBook Pro A1502 (2014)','MacBook Pro A1398 (2014)','MacBook Pro A1502 (2015)',
+    'MacBook Pro A1398 (2015)','MacBook Pro A1706 (2016 13)','MacBook Pro A1707 (2016 15)',
+    'MacBook Pro A1708 (2016 13 sin Touch Bar)','MacBook Pro A1706 (2017)','MacBook Pro A1707 (2017)',
+    'MacBook Pro A1989 (2018 13)','MacBook Pro A1990 (2018 15)','MacBook Pro A2159 (2019 13)',
+    'MacBook Pro A1990 (2019 15)','MacBook Pro A2141 (2019 16)','MacBook Pro A2251 (2020 13)',
+    'MacBook Pro A2289 (2020 13)','MacBook Pro M1 A2338 (2020)','MacBook Pro M1 Pro A2442 (2021 14)',
+    'MacBook Pro M1 Pro A2485 (2021 16)','MacBook Pro M1 Max A2485 (2021 16)',
+    'MacBook Pro M2 A2338 (2022)','MacBook Pro M2 Pro A2779 (2023 14)',
+    'MacBook Pro M2 Max A2780 (2023 16)','MacBook Pro M3 A2918 (2023 14)',
+    'MacBook Pro M3 Pro A2992 (2023 14)','MacBook Pro M3 Max A2991 (2023 16)',
+    'MacBook Pro M4 (2024)','MacBook Pro M4 Pro (2024)','MacBook Pro M4 Max (2024)',
+    'MacBook A1534 (2015)','MacBook A1534 (2016)','MacBook A1534 (2017)','MacBook A1534 (2018 12)',
+  ],
+  ipad: [
+    'iPad 2','iPad 3ra generación','iPad 4ta generación',
+    'iPad Air (1ra generación)','iPad Air 2','iPad Air 3ra generación','iPad Air 4ta generación',
+    'iPad Air 5ta generación (M1)','iPad Air M2 11" (2024)','iPad Air M2 13" (2024)',
+    'iPad Mini 1ra generación','iPad Mini 2','iPad Mini 3','iPad Mini 4','iPad Mini 5ta generación',
+    'iPad Mini 6ta generación','iPad Mini 7ma generación',
+    'iPad 5ta generación','iPad 6ta generación','iPad 7ma generación','iPad 8va generación',
+    'iPad 9na generación','iPad 10ma generación',
+    'iPad Pro 9.7" (2016)','iPad Pro 12.9" (2015)','iPad Pro 10.5" (2017)','iPad Pro 12.9" (2017)',
+    'iPad Pro 11" (2018)','iPad Pro 12.9" (2018)','iPad Pro 11" (2020)','iPad Pro 12.9" (2020)',
+    'iPad Pro 11" M1 (2021)','iPad Pro 12.9" M1 (2021)',
+    'iPad Pro 11" M2 (2022)','iPad Pro 12.9" M2 (2022)',
+    'iPad Pro 11" M4 (2024)','iPad Pro 13" M4 (2024)',
+  ],
+  imac: [
+    'iMac 21.5" (2010)','iMac 27" (2010)','iMac 21.5" (2011)','iMac 27" (2011)',
+    'iMac 21.5" (2012)','iMac 27" (2012)','iMac 21.5" (2013)','iMac 27" (2013)',
+    'iMac 21.5" (2014)','iMac 27" (2014)','iMac 21.5" (2015)','iMac 27" (2015)',
+    'iMac 21.5" (2017)','iMac 27" (2017)','iMac Pro 27" (2017)',
+    'iMac 21.5" (2019)','iMac 27" (2019)','iMac 27" (2020)',
+    'iMac M1 24" (2021)','iMac M3 24" (2023)',
+  ],
+  macmini: [
+    'Mac Mini (2010)','Mac Mini (2011)','Mac Mini (2012)','Mac Mini (2014)',
+    'Mac Mini (2018)','Mac Mini (2020)','Mac Mini M1 (2020)',
+    'Mac Mini M2 (2023)','Mac Mini M2 Pro (2023)',
+    'Mac Mini M4 (2024)','Mac Mini M4 Pro (2024)',
+  ],
+  ipod: [
+    'iPod Touch 5ta generación','iPod Touch 6ta generación','iPod Touch 7ma generación',
+    'iPod Nano 7ma generación','iPod Classic',
+  ],
+  samsung: [
+    // Serie S
+    'Samsung Galaxy S10 — G973','Samsung Galaxy S10+ — G975','Samsung Galaxy S10e — G970',
+    'Samsung Galaxy S20 — G980','Samsung Galaxy S20+ — G985','Samsung Galaxy S20 Ultra — G988',
+    'Samsung Galaxy S21 — G991','Samsung Galaxy S21+ — G996','Samsung Galaxy S21 Ultra — G998',
+    'Samsung Galaxy S22 — S901','Samsung Galaxy S22+ — S906','Samsung Galaxy S22 Ultra — S908',
+    'Samsung Galaxy S23 — S911','Samsung Galaxy S23+ — S916','Samsung Galaxy S23 Ultra — S918',
+    'Samsung Galaxy S24 — S921','Samsung Galaxy S24+ — S926','Samsung Galaxy S24 Ultra — S928',
+    'Samsung Galaxy S25 — S931','Samsung Galaxy S25+ — S936','Samsung Galaxy S25 Ultra — S938',
+    // Serie A
+    'Samsung Galaxy A03 — A035','Samsung Galaxy A03s — A037','Samsung Galaxy A04 — A045',
+    'Samsung Galaxy A04s — A047','Samsung Galaxy A05 — A055','Samsung Galaxy A05s — A057',
+    'Samsung Galaxy A13 — A135','Samsung Galaxy A14 — A145','Samsung Galaxy A15 — A155',
+    'Samsung Galaxy A23 — A235','Samsung Galaxy A24 — A245','Samsung Galaxy A25 — A256',
+    'Samsung Galaxy A33 — A336','Samsung Galaxy A34 — A346','Samsung Galaxy A35 — A356',
+    'Samsung Galaxy A53 — A536','Samsung Galaxy A54 — A546','Samsung Galaxy A55 — A556',
+    'Samsung Galaxy A73 — A736',
+    // Serie M
+    'Samsung Galaxy M13 — M135','Samsung Galaxy M14 — M146','Samsung Galaxy M23 — M236',
+    'Samsung Galaxy M33 — M336','Samsung Galaxy M34 — M346','Samsung Galaxy M53 — M536','Samsung Galaxy M54 — M546',
+    // Serie Z
+    'Samsung Galaxy Z Flip3 — F711','Samsung Galaxy Z Flip4 — F721','Samsung Galaxy Z Flip5 — F731','Samsung Galaxy Z Flip6 — F741',
+    'Samsung Galaxy Z Fold3 — F926','Samsung Galaxy Z Fold4 — F936','Samsung Galaxy Z Fold5 — F946','Samsung Galaxy Z Fold6 — F956',
+    // Serie Note
+    'Samsung Galaxy Note 9 — N960','Samsung Galaxy Note 10 — N970','Samsung Galaxy Note 10+ — N975',
+    'Samsung Galaxy Note 20 — N980','Samsung Galaxy Note 20 Ultra — N986',
+    // Tablets
+    'Samsung Galaxy Tab A7 — T500','Samsung Galaxy Tab A8 — X200','Samsung Galaxy Tab S6 — T860',
+    'Samsung Galaxy Tab S7 — T870','Samsung Galaxy Tab S8 — X700','Samsung Galaxy Tab S9 — X710',
+  ],
+  motorola: [
+    // Moto G
+    'Motorola Moto G6 — XT1925','Motorola Moto G6 Play — XT1922','Motorola Moto G7 — XT1962','Motorola Moto G7 Play — XT1952',
+    'Motorola Moto G8 — XT2045','Motorola Moto G8 Play — XT2015','Motorola Moto G8 Power — XT2041',
+    'Motorola Moto G9 — XT2083','Motorola Moto G9 Play — XT2083','Motorola Moto G9 Power — XT2091',
+    'Motorola Moto G10 — XT2127','Motorola Moto G20 — XT2128','Motorola Moto G22 — XT2231','Motorola Moto G23 — XT2333',
+    'Motorola Moto G24 — XT2423','Motorola Moto G30 — XT2129','Motorola Moto G31 — XT2173','Motorola Moto G32 — XT2235',
+    'Motorola Moto G42 — XT2233','Motorola Moto G50 — XT2137','Motorola Moto G52 — XT2221','Motorola Moto G53 — XT2335',
+    'Motorola Moto G54 — XT2343','Motorola Moto G60 — XT2135','Motorola Moto G62 — XT2223','Motorola Moto G71 — XT2169',
+    'Motorola Moto G72 — XT2255','Motorola Moto G73 — XT2237','Motorola Moto G84 — XT2347','Motorola Moto G100 — XT2125',
+    'Motorola Moto G200 — XT2175',
+    // Moto Edge
+    'Motorola Edge 20 — XT2143','Motorola Edge 20 Pro — XT2145','Motorola Edge 30 — XT2203','Motorola Edge 30 Pro — XT2201',
+    'Motorola Edge 30 Neo — XT2207','Motorola Edge 40 — XT2303','Motorola Edge 40 Pro — XT2301','Motorola Edge 40 Neo — XT2307',
+    'Motorola Edge 50 — XT2403','Motorola Edge 50 Pro — XT2401','Motorola Edge 50 Ultra — XT2411','Motorola Edge 50 Fusion — XT2421',
+    // Moto E
+    'Motorola Moto E6 — XT2005','Motorola Moto E6s — XT2053','Motorola Moto E7 — XT2052','Motorola Moto E7 Plus — XT2081',
+    'Motorola Moto E20 — XT2155','Motorola Moto E22 — XT2239','Motorola Moto E32 — XT2245','Motorola Moto E40 — XT2159',
+    // Razr
+    'Motorola Razr 2022 — XT2251','Motorola Razr 40 — XT2323','Motorola Razr 40 Ultra — XT2321','Motorola Razr 50 — XT2451',
+  ],
+  xiaomi: [
+    'Xiaomi Redmi 9','Xiaomi Redmi 9A','Xiaomi Redmi 9C','Xiaomi Redmi 10','Xiaomi Redmi 10A',
+    'Xiaomi Redmi 10C','Xiaomi Redmi 12','Xiaomi Redmi 12C','Xiaomi Redmi 13','Xiaomi Redmi 13C',
+    'Xiaomi Redmi Note 9','Xiaomi Redmi Note 9S','Xiaomi Redmi Note 9 Pro',
+    'Xiaomi Redmi Note 10','Xiaomi Redmi Note 10S','Xiaomi Redmi Note 10 Pro',
+    'Xiaomi Redmi Note 11','Xiaomi Redmi Note 11S','Xiaomi Redmi Note 11 Pro',
+    'Xiaomi Redmi Note 12','Xiaomi Redmi Note 12S','Xiaomi Redmi Note 12 Pro',
+    'Xiaomi Redmi Note 13','Xiaomi Redmi Note 13S','Xiaomi Redmi Note 13 Pro',
+    'Xiaomi Redmi Note 14','Xiaomi Redmi Note 14 Pro',
+    'Xiaomi POCO M3','Xiaomi POCO M4','Xiaomi POCO M4 Pro','Xiaomi POCO M5','Xiaomi POCO M6',
+    'Xiaomi POCO X3','Xiaomi POCO X3 Pro','Xiaomi POCO X4','Xiaomi POCO X4 Pro',
+    'Xiaomi POCO X5','Xiaomi POCO X5 Pro','Xiaomi POCO X6','Xiaomi POCO X6 Pro',
+    'Xiaomi POCO F3','Xiaomi POCO F4','Xiaomi POCO F5','Xiaomi POCO F6',
+    'Xiaomi 11','Xiaomi 11T','Xiaomi 11T Pro','Xiaomi 12','Xiaomi 12T','Xiaomi 12T Pro',
+    'Xiaomi 13','Xiaomi 13T','Xiaomi 13T Pro','Xiaomi 14','Xiaomi 14T','Xiaomi 14T Pro',
+    'Xiaomi Mi 9','Xiaomi Mi 10','Xiaomi Mi 10T','Xiaomi Mi 11','Xiaomi Mi 11 Lite',
+  ],
+  dji: [
+    'DJI Mini 2','DJI Mini 2 SE','DJI Mini 3','DJI Mini 3 Pro','DJI Mini 4 Pro',
+    'DJI Air 2S','DJI Air 3','DJI Air 3S',
+    'DJI Mavic 3','DJI Mavic 3 Classic','DJI Mavic 3 Pro','DJI Mavic 3 Cine',
+    'DJI FPV','DJI Avata','DJI Avata 2',
+    'DJI Phantom 4','DJI Phantom 4 Pro','DJI Phantom 4 Pro V2',
+    'DJI Osmo Mobile 4','DJI Osmo Mobile 5','DJI Osmo Mobile 6','DJI Osmo Mobile SE',
+    'DJI Osmo Pocket 2','DJI Osmo Pocket 3',
+    'DJI Action 2','DJI Action 3','DJI Action 4','DJI Action 5 Pro',
+    'DJI RS 2','DJI RS 3','DJI RS 3 Mini','DJI RS 3 Pro','DJI RS 4','DJI RS 4 Pro',
+    'DJI Goggles 2','DJI Goggles 3','DJI RC','DJI RC 2','DJI RC Pro',
+  ],
+};
+
+// =============================================
+// FALLAS
+// =============================================
+const FALLAS_CELULAR = [
+  'No enciende',
+  'No carga',
+  'Pantalla rota',
+  'La pantalla está sana pero no da imagen o no funciona el táctil',
+  'Rendimiento de batería',
+  'Fallas de cámaras',
+  'Falla de Face ID',
+  'Falla de botones',
+  'Tapa dañada',
+  'Cristal de cámara dañado',
+  'Problemas de reinicios',
+  'Fallas de señal (WiFi, Bluetooth, telefonía)',
+  'Otra falla',
+];
+
+const FALLAS_MAC = [
+  'Fallas de display',
+  'Fallas de teclas',
+  'Fallas de WiFi',
+  'No enciende',
+  'Problemas de reinicios',
+  'Problemas de temperatura',
+  'Otra falla',
+];
+
+// =============================================
+// STATE
+// =============================================
+let state = {
+  marca: '',
+  marcaOtro: '',
+  tipoApple: '',
+  modelo: '',
+  falla: '',
+  fallaLibre: '',
+  adicional: '',
+  nombre: '',
+  email: '',
+  tel: '',
+  consent: false,
+};
+
+function isCelular(tipo) {
+  return ['iphone','applewatch','ipad','ipod'].includes(tipo)
+    || ['samsung','motorola','xiaomi'].includes(state.marca);
+}
+
+function isMac(tipo) {
+  return ['macbook','imac','macmini'].includes(tipo);
+}
+
+function isAirpods(tipo) { return tipo === 'airpods'; }
+function isDji() { return state.marca === 'dji'; }
+
+// =============================================
+// PROGRESS
+// =============================================
+function updateProgress() {
+  let steps = 0, done = 0;
+
+  steps++; if (state.marca) done++;
+
+  if (state.marca === 'apple') {
+    steps++; if (state.tipoApple) done++;
+  }
+
+  if (state.tipoApple !== 'airpods' && !isDji()) {
+    steps++; if (state.modelo) done++;
+  }
+
+  steps++; if (state.falla) done++;
+  steps++; // datos
+  if (state.nombre && state.email && state.tel && state.consent) done++;
+
+  const pct = Math.round((done / steps) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// =============================================
+// SHOW/HIDE STEPS
+// =============================================
+function showStep(id) {
+  const el = document.getElementById(id);
+  if (el && !el.classList.contains('visible')) {
+    el.classList.add('visible');
+  }
+}
+
+function hideStep(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('visible');
+}
+
+function hideFrom(id) {
+  const ids = ['step-tipo-apple','step-modelo','step-falla','step-adicional','step-datos','submit-wrap','success-card'];
+  let hiding = false;
+  for (const sid of ids) {
+    if (sid === id) hiding = true;
+    if (hiding) hideStep(sid);
+  }
+  document.getElementById('submit-wrap').style.display = 'none';
+}
+
+// =============================================
+// MARCA CHANGE
+// =============================================
+function onMarcaChange() {
+  const val = document.getElementById('sel-marca').value;
+  state.marca = val;
+  state.tipoApple = '';
+  state.modelo = '';
+  state.falla = '';
+
+  const otroWrap = document.getElementById('marca-otro-wrap');
+  otroWrap.style.display = val === 'otro' ? 'block' : 'none';
+
+  hideFrom('step-tipo-apple');
+  clearModelo();
+  clearFallas();
+
+  if (!val) { updateProgress(); return; }
+
+  if (val === 'apple') {
+    showStep('step-tipo-apple');
+  } else {
+    // No Apple: autocomplete con listas por marca
+    showStep('step-modelo');
+    const modelos = MODELOS[val] || [];
+    document.getElementById('modelo-label').textContent = 'Modelo del equipo';
+    if (val === 'dji') {
+      document.getElementById('modelo-hint').textContent = 'Escribí para buscar — drones, gimbals, cámaras...';
+      document.getElementById('modelo-input').placeholder = 'Escribí para buscar tu modelo DJI...';
+    } else if (val === 'otro') {
+      document.getElementById('modelo-hint').textContent = 'Escribí el modelo de tu equipo.';
+      document.getElementById('modelo-input').placeholder = 'Escribí el modelo...';
+    } else {
+      document.getElementById('modelo-hint').textContent = 'Escribí para buscar — o elegí "Mi modelo no está en la lista" si no lo encontrás.';
+      document.getElementById('modelo-input').placeholder = 'Escribí el modelo...';
+    }
+    setupAutocomplete(modelos);
+  }
+
+  updateProgress();
+}
+
+// =============================================
+// TIPO APPLE CHANGE
+// =============================================
+function onTipoAppleChange() {
+  const val = document.getElementById('sel-tipo-apple').value;
+  state.tipoApple = val;
+  state.modelo = '';
+  state.falla = '';
+
+  hideFrom('step-modelo');
+  clearModelo();
+  clearFallas();
+
+  if (!val) { updateProgress(); return; }
+
+  if (val === 'airpods') {
+    // AirPods: falla libre directa
+    showFallasLibre();
+    showStep('step-adicional');
+    showStep('step-datos');
+    document.getElementById('submit-wrap').style.display = 'block';
+  } else {
+    // Resto Apple: mostrar modelo con autocomplete
+    const modelos = MODELOS[val] || [];
+    showStep('step-modelo');
+    document.getElementById('modelo-label').textContent = 'Modelo del equipo';
+    document.getElementById('modelo-hint').textContent = 'Escribí para buscar — podés usar el número de modelo o el año.';
+    document.getElementById('modelo-input').placeholder = 'Ej: iPhone 14 Pro, MacBook Air M2...';
+    setupAutocomplete(modelos);
+  }
+
+  updateProgress();
+}
+
+// =============================================
+// FALLAS LIBRE (DJI / AirPods)
+// =============================================
+function showFallasLibre() {
+  showStep('step-falla');
+  const container = document.getElementById('fallas-container');
+  container.innerHTML = '';
+  document.getElementById('falla-libre-wrap').style.display = 'block';
+  document.getElementById('falla-libre-input').placeholder = 'Describí el problema de tu equipo...';
+  document.getElementById('falla-libre-input').oninput = function() {
+    state.fallaLibre = this.value;
+    state.falla = this.value;
+    updateProgress();
+  };
+}
+
+// =============================================
+// RENDER FALLAS
+// =============================================
+function renderFallas(lista) {
+  const container = document.getElementById('fallas-container');
+  container.innerHTML = '';
+  document.getElementById('falla-libre-wrap').style.display = 'none';
+
+  const grid = document.createElement('div');
+  grid.className = 'fallas-grid';
+
+  lista.forEach(falla => {
+    const isOtra = falla.toLowerCase().startsWith('otra');
+    const label = document.createElement('label');
+    label.className = 'falla-option' + (isOtra ? ' falla-otra' : '');
+    label.innerHTML = `<input type="radio" name="falla" value="${falla}"><span class="falla-dot"></span>${falla}`;
+
+    label.addEventListener('click', () => {
+      document.querySelectorAll('.falla-option').forEach(o => o.classList.remove('selected'));
+      label.classList.add('selected');
+      state.falla = falla;
+
+      const libreWrap = document.getElementById('falla-libre-wrap');
+      if (isOtra) {
+        libreWrap.style.display = 'block';
+        document.getElementById('falla-libre-input').placeholder = 'Describí la falla...';
+        document.getElementById('falla-libre-input').oninput = function() {
+          state.fallaLibre = this.value;
+        };
+      } else {
+        libreWrap.style.display = 'none';
+        state.fallaLibre = '';
+      }
+
+      showStep('step-adicional');
+      showStep('step-datos');
+      document.getElementById('submit-wrap').style.display = 'block';
+      updateProgress();
+    });
+
+    grid.appendChild(label);
+  });
+
+  container.appendChild(grid);
+}
+
+function clearModelo() {
+  document.getElementById('modelo-input').value = '';
+  state.modelo = '';
+  const list = document.getElementById('autocomplete-list');
+  list.innerHTML = '';
+  list.classList.remove('open');
+}
+
+function clearFallas() {
+  document.getElementById('fallas-container').innerHTML = '';
+  document.getElementById('falla-libre-wrap').style.display = 'none';
+  state.falla = '';
+  state.fallaLibre = '';
+}
+
+// =============================================
+// AUTOCOMPLETE
+// =============================================
+let currentModelos = [];
+let acSelected = -1;
+
+function setupAutocomplete(modelos) {
+  currentModelos = modelos;
+  const input = document.getElementById('modelo-input');
+  const list = document.getElementById('autocomplete-list');
+
+  input.value = '';
+  list.innerHTML = '';
+  list.classList.remove('open');
+  acSelected = -1;
+
+  input.oninput = function() {
+    const q = this.value.trim().toLowerCase();
+    state.modelo = this.value.trim();
+    acSelected = -1;
+
+    if (!q || currentModelos.length === 0) {
+      list.classList.remove('open');
+      if (!q) {
+        // Para marcas sin lista: cualquier texto es válido
+        if (currentModelos.length === 0 && this.value.trim()) {
+          onModeloSelected(this.value.trim());
+        }
+      }
+      updateProgress();
+      return;
+    }
+
+    const matches = currentModelos.filter(m => m.toLowerCase().includes(q)).slice(0, 12);
+
+    if (matches.length === 0) {
+      list.classList.remove('open');
+      updateProgress();
+      return;
+    }
+
+    list.innerHTML = matches.map(m => {
+      const highlighted = m.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>');
+      return `<div class="autocomplete-item" data-value="${m}">${highlighted}</div>`;
+    }).join('');
+
+    // "Otro modelo"
+    list.innerHTML += `<div class="autocomplete-item" data-value="__otro__" style="border-top:1px solid var(--border); color:var(--text-muted);">✏️ Mi modelo no está en la lista</div>`;
+
+    list.classList.add('open');
+
+    list.querySelectorAll('.autocomplete-item').forEach(item => {
+      item.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        const val = item.dataset.value;
+        if (val === '__otro__') {
+          input.value = '';
+          input.placeholder = 'Escribí tu modelo manualmente...';
+          list.classList.remove('open');
+          input.oninput = function() {
+            state.modelo = this.value.trim();
+            if (state.modelo) onModeloSelected(state.modelo);
+            updateProgress();
+          };
+        } else {
+          onModeloSelected(val);
+        }
+      });
+    });
+
+    updateProgress();
+  };
+
+  input.onkeydown = function(e) {
+    const items = list.querySelectorAll('.autocomplete-item');
+    if (e.key === 'ArrowDown') {
+      acSelected = Math.min(acSelected + 1, items.length - 1);
+      items.forEach((it, i) => it.classList.toggle('active', i === acSelected));
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      acSelected = Math.max(acSelected - 1, 0);
+      items.forEach((it, i) => it.classList.toggle('active', i === acSelected));
+      e.preventDefault();
+    } else if (e.key === 'Enter' && acSelected >= 0) {
+      const val = items[acSelected]?.dataset.value;
+      if (val && val !== '__otro__') onModeloSelected(val);
+      e.preventDefault();
+    } else if (e.key === 'Escape') {
+      list.classList.remove('open');
+    }
+  };
+
+  input.onblur = function() {
+    setTimeout(() => list.classList.remove('open'), 150);
+    // Si escribió algo sin seleccionar de la lista, lo tomamos igual
+    if (this.value.trim() && currentModelos.length === 0) {
+      onModeloSelected(this.value.trim());
+    }
+  };
+}
+
+function onModeloSelected(val) {
+  const input = document.getElementById('modelo-input');
+  const list = document.getElementById('autocomplete-list');
+  input.value = val;
+  list.classList.remove('open');
+  state.modelo = val;
+
+  // Mostrar fallas según tipo
+  showStep('step-falla');
+  const tipo = state.tipoApple || state.marca;
+
+  if (isDji()) {
+    showFallasLibre();
+  } else if (isMac(tipo)) {
+    renderFallas(FALLAS_MAC);
+  } else {
+    renderFallas(FALLAS_CELULAR);
+  }
+
+  updateProgress();
+}
+
+// =============================================
+// DATOS CHANGE
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('inp-nombre').addEventListener('input', function() {
+    state.nombre = this.value.trim();
+    updateProgress();
+  });
+  document.getElementById('inp-email').addEventListener('input', function() {
+    state.email = this.value.trim();
+    updateProgress();
+  });
+  document.getElementById('inp-tel').addEventListener('input', function() {
+    state.tel = this.value.trim();
+    updateProgress();
+  });
+  document.getElementById('consent-check').addEventListener('change', function() {
+    state.consent = this.checked;
+    updateProgress();
+  });
+  document.getElementById('info-adicional').addEventListener('input', function() {
+    state.adicional = this.value.trim();
+  });
+});
+
+// =============================================
+// VALIDACIÓN Y ENVÍO
+// =============================================
+function validate() {
+  let ok = true;
+
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const tel = document.getElementById('inp-tel').value.trim();
+  const consent = document.getElementById('consent-check').checked;
+
+  const errNombre = document.getElementById('err-nombre');
+  const errEmail = document.getElementById('err-email');
+  const errTel = document.getElementById('err-tel');
+
+  errNombre.classList.toggle('show', !nombre);
+  errEmail.classList.toggle('show', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  errTel.classList.toggle('show', !tel);
+
+  if (!nombre || !email || !tel || !consent) ok = false;
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ok = false;
+
+  return ok;
+}
+
+function buildWAMessage() {
+  const marca = state.marca === 'otro' ? state.marcaOtro || 'Otra' : state.marca.charAt(0).toUpperCase() + state.marca.slice(1);
+  const tipo = state.tipoApple ? state.tipoApple.charAt(0).toUpperCase() + state.tipoApple.slice(1) : '';
+  const modelo = state.modelo || 'No especificado';
+  const falla = state.fallaLibre || state.falla || 'No especificada';
+  const adicional = state.adicional ? `\nInfo adicional: ${state.adicional}` : '';
+
+  return `Hola! Quiero cotizar una reparación:
+
+📱 *Marca:* ${marca}${tipo ? `\n📦 *Tipo:* ${tipo}` : ''}
+🔧 *Modelo:* ${modelo}
+⚠️ *Problema:* ${falla}${adicional}
+
+👤 *Nombre:* ${document.getElementById('inp-nombre').value.trim()}
+✉️ *E-mail:* ${document.getElementById('inp-email').value.trim()}
+📞 *Teléfono:* ${document.getElementById('inp-tel').value.trim()}`;
+}
+
+function submitForm() {
+  if (!validate()) return;
+
+  const msg = buildWAMessage();
+  const url = `https://wa.me/5491153403805?text=${encodeURIComponent(msg)}`;
+
+  document.getElementById('btn-wa-final').href = url;
+
+  // Ocultar form, mostrar success
+  document.getElementById('formSteps').style.display = 'none';
+  document.getElementById('success-card').style.display = 'block';
+  document.getElementById('success-card').classList.add('visible');
+  document.getElementById('progressFill').style.width = '100%';
+
+  // Abrir WA automáticamente
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// Cerrar autocomplete al click fuera
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.autocomplete-wrap')) {
+    document.getElementById('autocomplete-list').classList.remove('open');
+  }
+});
+
+// Marca otro input
+document.getElementById('marca-otro-input').addEventListener('input', function() {
+  state.marcaOtro = this.value.trim();
+});
+</script>
+</body>
+</html>
