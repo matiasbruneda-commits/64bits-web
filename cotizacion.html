@@ -1048,6 +1048,11 @@ function showFallasLibre() {
   document.getElementById('falla-libre-input').oninput = function() {
     state.fallaLibre = this.value;
     state.falla = this.value;
+    if (this.value.trim()) {
+      showStep('step-adicional');
+      showStep('step-datos');
+      document.getElementById('submit-wrap').style.display = 'block';
+    }
     updateProgress();
   };
 }
