@@ -828,7 +828,16 @@ const MODELOS = {
     'Xiaomi 13','Xiaomi 13T','Xiaomi 13T Pro','Xiaomi 14','Xiaomi 14T','Xiaomi 14T Pro',
     'Xiaomi Mi 9','Xiaomi Mi 10','Xiaomi Mi 10T','Xiaomi Mi 11','Xiaomi Mi 11 Lite',
   ],
-  dji: [
+  airpods: [
+    'AirPods 1ra generación — A1523','AirPods 2da generación — A2032',
+    'AirPods 3ra generación — A2565','AirPods 4 — A3056',
+    'AirPods 4 con ANC — A3053',
+    'AirPods Pro 1ra generación — A2084','AirPods Pro 2da generación — A2931',
+    'AirPods Pro 2da gen USB-C — A3047','AirPods Pro 3ra generación — A3063',
+    'AirPods Max (Lightning) — A2096','AirPods Max (USB-C) — A2564',
+    'AirPods Max 2 — A3454',
+  ],
+    dji: [
     'DJI Mini 2','DJI Mini 2 SE','DJI Mini 3','DJI Mini 3 Pro','DJI Mini 4 Pro',
     'DJI Air 2S','DJI Air 3','DJI Air 3S',
     'DJI Mavic 3','DJI Mavic 3 Classic','DJI Mavic 3 Pro','DJI Mavic 3 Cine',
@@ -1007,11 +1016,13 @@ function onTipoAppleChange() {
   if (!val) { updateProgress(); return; }
 
   if (val === 'airpods') {
-    // AirPods: falla libre directa
-    showFallasLibre();
-    showStep('step-adicional');
-    showStep('step-datos');
-    document.getElementById('submit-wrap').style.display = 'block';
+    // AirPods: mostrar modelo con autocomplete
+    const modelos = MODELOS['airpods'] || [];
+    showStep('step-modelo');
+    document.getElementById('modelo-label').textContent = 'Modelo de AirPods';
+    document.getElementById('modelo-hint').textContent = 'Escribí para buscar tu modelo.';
+    document.getElementById('modelo-input').placeholder = 'Ej: AirPods Pro, AirPods 4...';
+    setupAutocomplete(modelos);
   } else {
     // Resto Apple: mostrar modelo con autocomplete
     const modelos = MODELOS[val] || [];
@@ -1214,7 +1225,7 @@ function onModeloSelected(val) {
   showStep('step-falla');
   const tipo = state.tipoApple || state.marca;
 
-  if (isDji()) {
+  if (isDji() || isAirpods(tipo)) {
     showFallasLibre();
   } else if (isMac(tipo)) {
     renderFallas(FALLAS_MAC);
