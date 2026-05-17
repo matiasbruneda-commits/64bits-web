@@ -219,6 +219,13 @@
     }
 
     .field-input::placeholder { color: var(--text-muted); }
+    .field-input:-webkit-autofill,
+    .field-input:-webkit-autofill:hover,
+    .field-input:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text);
+      -webkit-box-shadow: 0 0 0px 1000px var(--bg-elevated) inset;
+      transition: background-color 5000s ease-in-out 0s;
+    }
 
     .field-hint {
       font-size: 0.78rem;
@@ -513,6 +520,11 @@
       color: #e55;
       margin-top: 0.4rem;
       display: none;
+      background: rgba(220,50,50,0.12);
+      border: 1px solid rgba(220,50,50,0.3);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.75rem;
+      animation: slideDown 0.2s ease;
     }
     .field-error.show { display: block; }
   </style>
@@ -615,22 +627,24 @@
           <span class="consent-box"></span>
           <span>Quiero que me envíen una cotización.</span>
         </label>
+        <div class="field-error" id="err-consent">⚠️ Necesitamos tu consentimiento para continuar.</div>
       </div>
 
       <div style="margin-bottom:0.75rem;">
         <label class="field-label" style="color:var(--text-muted);">Nombre completo <span style="color:#e55;">*</span></label>
         <input class="field-input" type="text" id="inp-nombre" placeholder="Tu nombre" oninput="updateProgress()">
-        <div class="field-error" id="err-nombre">Por favor ingresá tu nombre.</div>
+        <div class="field-error" id="err-nombre">⚠️ Este campo es obligatorio.</div>
       </div>
 
       <div style="margin-bottom:0.75rem;">
         <label class="field-label" style="color:var(--text-muted);">E-mail <span style="color:#e55;">*</span></label>
-        <input class="field-input" type="email" id="inp-email" placeholder="tu@email.com" oninput="updateProgress()">
-        <div class="field-error" id="err-email">Por favor ingresá un e-mail válido.</div>
+        <input class="field-input" type="email" id="inp-email" placeholder="tu@email.com" oninput="updateProgress(); suggestEmail(this)" autocomplete="email" list="email-suggestions">
+        <datalist id="email-suggestions"></datalist>
+        <div class="field-error" id="err-email">⚠️ Ingresá un e-mail válido.</div>
       </div>
 
       <div style="margin-bottom:0.25rem;">
-        <label class="field-label" style="color:var(--text-muted);">Teléfono <span style="color:#e55;">*</span></label>
+        <label class="field-label" style="color:var(--text-muted);">Teléfono <span style="color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(opcional)</span></label>
         <input class="field-input" type="tel" id="inp-tel" placeholder="+54 11 5340-3805" value="+5411" oninput="updateProgress()">
         <div class="field-error" id="err-tel">Por favor ingresá tu teléfono.</div>
         <p class="field-hint">Ejemplo: +541153403805</p>
@@ -651,7 +665,7 @@
   <div class="success-card" id="success-card">
       <div class="success-icon">✓</div>
       <div class="success-title">¡Listo! Te contactamos pronto.</div>
-      <p class="success-sub">Tu consulta fue enviada. En breve Matias o Bernardo te responden con el presupuesto.</p>
+      <p class="success-sub">Abrí WhatsApp para enviarnos tu consulta. En breve Matias o Bernardo te responden con el presupuesto.</p>
       <div class="success-actions">
         <a class="btn-wa" id="btn-wa-final" href="#" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1281,11 +1295,13 @@ function validate() {
   const errEmail = document.getElementById('err-email');
   const errTel = document.getElementById('err-tel');
 
+  const errConsent = document.getElementById('err-consent');
+
   errNombre.classList.toggle('show', !nombre);
   errEmail.classList.toggle('show', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-  errTel.classList.toggle('show', !tel);
+  errConsent.classList.toggle('show', !consent);
 
-  if (!nombre || !email || !tel || !consent) ok = false;
+  if (!nombre || !email || !consent) ok = false;
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ok = false;
 
   return ok;
@@ -1338,7 +1354,7 @@ function submitForm() {
   // Cambiar mensaje si es fuera de horario
   if (!horarioComercial) {
     const sub = document.querySelector('.success-sub');
-    if (sub) sub.innerHTML = 'Tu consulta fue enviada. Estamos fuera del horario comercial, pero te responderemos a la brevedad. 🙌';
+    if (sub) sub.innerHTML = 'Abrí WhatsApp para enviarnos tu consulta. Estamos fuera del horario comercial, pero te responderemos a la brevedad. 🙌';
   }
 
   // Ocultar form, mostrar success
@@ -1356,6 +1372,20 @@ function submitForm() {
   } catch(e) {
     // Si el navegador bloquea el popup, el cliente puede usar el botón
   }
+}
+
+function suggestEmail(input) {
+  const val = input.value;
+  const datalist = document.getElementById('email-suggestions');
+  const dominios = ['@gmail.com', '@hotmail.com', '@outlook.com', '@yahoo.com', '@icloud.com'];
+  datalist.innerHTML = '';
+  if (val.includes('@')) return;
+  if (!val) return;
+  dominios.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = val + d;
+    datalist.appendChild(opt);
+  });
 }
 
 // Cerrar autocomplete al click fuera
