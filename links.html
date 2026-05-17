@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>64 Bits Belgrano</title>
+  <meta name="description" content="Servicio técnico especializado en reparación de iPhone y MacBook en Belgrano, CABA.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-card: #111111;
+      --accent: #8B1A1A;
+      --yellow: #F5C518;
+      --yellow-dim: rgba(245,197,24,0.08);
+      --yellow-glow: rgba(245,197,24,0.15);
+      --text: #f0f0f0;
+      --text-muted: #666;
+      --border: rgba(255,255,255,0.06);
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 16px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* FONDO ANIMADO */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139,26,26,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(245,197,24,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* LOGO Y HEADER */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .logo-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 22px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(139,26,26,0.2);
+    }
+
+    .logo-wrap img {
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .brand-tagline {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .brand-tagline span {
+      color: var(--yellow);
+    }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--yellow-dim);
+      border: 1px solid rgba(245,197,24,0.1);
+      border-radius: 980px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .stat-num {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .stat-sep {
+      width: 1px;
+      background: rgba(245,197,24,0.15);
+      align-self: stretch;
+    }
+
+    /* LINKS */
+    .links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      padding: 1.1rem 1.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .link-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .link-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .link-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Botón primario - Cotización */
+    .link-btn.primary {
+      background: var(--yellow);
+      border-color: var(--yellow);
+      color: #000;
+      box-shadow: 0 4px 24px rgba(245,197,24,0.2);
+    }
+
+    .link-btn.primary:hover {
+      background: #ffd700;
+      border-color: #ffd700;
+      box-shadow: 0 8px 32px rgba(245,197,24,0.3);
+    }
+
+    .link-btn.primary .link-icon {
+      background: rgba(0,0,0,0.12);
+      color: #000;
+    }
+
+    /* Botón WhatsApp */
+    .link-btn.whatsapp {
+      background: var(--bg-card);
+      border-color: rgba(37,211,102,0.2);
+    }
+
+    .link-btn.whatsapp:hover {
+      border-color: rgba(37,211,102,0.4);
+      background: rgba(37,211,102,0.05);
+      box-shadow: 0 4px 20px rgba(37,211,102,0.08);
+    }
+
+    .link-btn.whatsapp .link-icon {
+      background: rgba(37,211,102,0.12);
+      color: #25D366;
+    }
+
+    /* Botón Web */
+    .link-btn.web {
+      background: var(--bg-card);
+      border-color: rgba(139,26,26,0.2);
+    }
+
+    .link-btn.web:hover {
+      border-color: rgba(139,26,26,0.4);
+      background: rgba(139,26,26,0.05);
+      box-shadow: 0 4px 20px rgba(139,26,26,0.08);
+    }
+
+    .link-btn.web .link-icon {
+      background: rgba(139,26,26,0.12);
+      color: var(--accent);
+    }
+
+    .link-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.1rem;
+    }
+
+    .link-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .link-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .link-sub {
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .link-btn.primary .link-sub { opacity: 0.5; }
+
+    .link-arrow {
+      font-size: 1rem;
+      opacity: 0.4;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .link-btn:hover .link-arrow {
+      transform: translateX(3px);
+      opacity: 0.7;
+    }
+
+    /* DELAYS */
+    .link-btn:nth-child(1) { animation-delay: 0.15s; }
+    .link-btn:nth-child(2) { animation-delay: 0.25s; }
+    .link-btn:nth-child(3) { animation-delay: 0.35s; }
+
+    /* Botón Compartir */
+    .link-btn.share {
+      background: var(--bg-card);
+      border-color: rgba(245,197,24,0.15);
+    }
+
+    .link-btn.share:hover {
+      border-color: rgba(245,197,24,0.35);
+      background: var(--yellow-dim);
+      box-shadow: 0 4px 20px rgba(245,197,24,0.06);
+    }
+
+    .link-btn.share .link-icon {
+      background: var(--yellow-dim);
+      color: var(--yellow);
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* TRUST */
+    .trust {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1rem;
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .trust-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--yellow);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      animation: fadeUp 0.6s 0.6s ease both;
+    }
+
+    .footer-address {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-credit {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-credit span {
+      color: var(--yellow);
+      opacity: 0.5;
+    }
+
+    /* ANIMACIONES */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header { animation-delay: 0.05s; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <img src="logo.svg" alt="64 Bits Belgrano">
+    </div>
+    <div class="brand-name">64 Bits Belgrano</div>
+    <div class="brand-tagline">Servicio técnico · <span>Microelectrónica</span></div>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">25+</span>
+        <span class="stat-label">años</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">4.8★</span>
+        <span class="stat-label">Google</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">Belgrano</span>
+        <span class="stat-label">CABA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKS -->
+  <div class="links">
+
+    <a href="/cotizacion" class="link-btn primary">
+      <div class="link-icon">⚡</div>
+      <div class="link-text">
+        <span class="link-title">Cotizá tu reparación</span>
+        
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://wa.me/5491153403805?text=Hola!%20Los%20contacto%20desde%20Instagram%20%F0%9F%91%8B" target="_blank" rel="noopener noreferrer" class="link-btn whatsapp">
+      <div class="link-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </div>
+      <div class="link-text">
+        <span class="link-title">Escribinos por WhatsApp</span>
+        
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a href="https://64bits.com.ar" target="_blank" rel="noopener noreferrer" class="link-btn web">
+      <div class="link-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="link-text">
+        <span class="link-title">64bits.com.ar</span>
+        
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+
+  </div>
+
+    <a href="https://wa.me/?text=Te%20recomiendo%2064%20Bits%20Belgrano%2C%20servicio%20t%C3%A9cnico%20especializado%20en%20iPhone%20y%20MacBook%20en%20Belgrano%3A%0A%0A%E2%9A%A1%20Cotiz%C3%A1%20tu%20reparaci%C3%B3n%3A%20https%3A%2F%2F64bits.com.ar%2Fcotizacion%0A%F0%9F%93%B1%20WhatsApp%3A%20https%3A%2F%2Fwa.me%2F5491153403805%0A%F0%9F%8C%90%20Web%3A%20https%3A%2F%2F64bits.com.ar%0A%F0%9F%93%B7%20Instagram%3A%20https%3A%2F%2Finstagram.com%2F64bitsbelgrano" target="_blank" rel="noopener noreferrer" class="link-btn share">
+      <div class="link-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </div>
+      <div class="link-text">
+        <span class="link-title">Compartí nuestro contacto</span>
+      </div>
+      <span class="link-arrow">→</span>
+    </a>
+
+  <div class="divider"></div>
+
+  <!-- TRUST -->
+  <div class="trust">
+    <div class="trust-item"><span class="trust-dot"></span> Diagnóstico sin costo</div>
+    <div class="trust-item"><span class="trust-dot"></span> Garantía incluida</div>
+    <div class="trust-item"><span class="trust-dot"></span> Reparación a nivel de placa</div>
+    <div class="trust-item"><span class="trust-dot"></span> Lun–Vie 10 a 18hs</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-address">Ciudad de la Paz 2347, local 63 · Belgrano, CABA</div>
+    <div class="footer-credit">© 2026 64 Bits Belgrano · <span>Created by 64bits.com.ar</span></div>
+  </div>
+
+</div>
+</body>
+</html>
