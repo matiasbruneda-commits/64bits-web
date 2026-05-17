@@ -1300,13 +1300,13 @@ function buildWAMessage() {
   const email = document.getElementById('inp-email').value.trim();
   const tel = document.getElementById('inp-tel').value.trim();
 
-  return 'Hola! Quiero cotizar una reparación:\n\n' +
-    '📱 *Marca:* ' + marca + (tipo ? '\n📦 *Tipo:* ' + tipo : '') + '\n' +
-    '🔧 *Modelo:* ' + modelo + '\n' +
-    '⚠️ *Problema:* ' + falla + adicional + '\n\n' +
-    '👤 *Nombre:* ' + nombre + '\n' +
-    '✉️ *E-mail:* ' + email + '\n' +
-    '📞 *Teléfono:* ' + tel + fueraHorario;
+  return 'Hola! Quiero cotizar una reparacion:\n\n' +
+    '✅ *Marca:* ' + marca + (tipo ? '\n✅ *Tipo:* ' + tipo : '') + '\n' +
+    '✅ *Modelo:* ' + modelo + '\n' +
+    '✅ *Problema:* ' + falla + adicional + '\n\n' +
+    '👋 *Nombre:* ' + nombre + '\n' +
+    '📧 *E-mail:* ' + email + '\n' +
+    '📞 *Telefono:* ' + tel + fueraHorario;
 }
 
 function submitForm() {
