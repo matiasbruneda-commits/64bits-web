@@ -213,7 +213,7 @@ body {
     gap: 12px;
     align-items: stretch;
     width: 100%;
-    max-width: 560px;
+    max-width: 600px;
 }
 
 .hero-actions-row {
