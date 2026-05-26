@@ -316,9 +316,16 @@ function openChat() {
     chatTrigger.classList.add('hidden');
     setTimeout(() => chatInput.focus(), 280);
     if (conversationHistory.length === 0) {
-        const welcome = 'Hola! Soy MAT-IA, el asistente virtual en 64 Bits. En que te puedo ayudar?';
-        appendMessage(welcome, 'bot');
-        conversationHistory.push({ role: 'assistant', content: welcome });
+        const welcome = 'Hola! Soy MAT-IA, el asistente virtual en 64 Bits. ¿En qué te puedo ayudar?';
+        setTimeout(() => {
+            const typingEl = showTyping();
+            setTimeout(() => {
+                typingEl.remove();
+                appendMessage(welcome, 'bot');
+                playMessageReceived();
+                conversationHistory.push({ role: 'assistant', content: welcome });
+            }, 1500);
+        }, 400);
     }
 }
 
