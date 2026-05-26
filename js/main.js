@@ -322,7 +322,7 @@ function closeChat() {
     chatTrigger.classList.remove('hidden');
 }
 
-matiaHeroBtn.addEventListener('click', openChat);
+if (matiaHeroBtn) matiaHeroBtn.addEventListener('click', openChat);
 chatTrigger.addEventListener('click', openChat);
 chatClose.addEventListener('click', closeChat);
 
