@@ -315,6 +315,11 @@ function openChat() {
     chatWidget.classList.add('open');
     chatTrigger.classList.add('hidden');
     setTimeout(() => chatInput.focus(), 280);
+    if (conversationHistory.length === 0) {
+        const welcome = 'Hola! Soy MAT-IA, el asistente virtual en 64 Bits. En que te puedo ayudar?';
+        appendMessage(welcome, 'bot');
+        conversationHistory.push({ role: 'assistant', content: welcome });
+    }
 }
 
 function closeChat() {
