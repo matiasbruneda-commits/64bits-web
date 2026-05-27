@@ -155,8 +155,8 @@ body {
     white-space: nowrap;
 }
 
-.btn-primary { background: var(--accent); color: var(--yellow); }
-.btn-primary:hover { background: var(--yellow); color: var(--accent); }
+.btn-primary { background: #25D366; color: #fff; }
+.btn-primary:hover { background: #1ebe5d; color: #fff; }
 
 .btn-yellow { background: var(--yellow); color: #000; font-weight: 700; border: 2px solid var(--yellow); width: 100%; justify-content: center; }
 .btn-yellow:hover { background: transparent; color: var(--yellow); }
